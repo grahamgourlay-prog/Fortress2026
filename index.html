@@ -92,7 +92,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 <div id="positions"></div>
 <div class="totals" id="totals"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price x shares. Prices persist via localStorage. Last edited: 03 Mar 2026</div>
+<div class="footer">Market value = live price x shares. Prices persist via localStorage. Last edited: 04 Mar 2026</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:38,avgCost:75.42,bookValue:2865.84,sealed:false,
@@ -102,21 +102,21 @@ const POSITIONS=[
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:72,avgCost:62.28,bookValue:4483.83,sealed:false,
    orders:[{label:"Mid Trap",price:54.15,amount:1000}]},
   {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle",shares:14,avgCost:84.461,bookValue:1182.46,sealed:false,
-   orders:[]},
+   orders:[{label:"Correction Trap",price:73.43,amount:1100},{label:"Capitulation Trap",price:57.97,amount:1100}]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy",shares:40,avgCost:46.24,bookValue:1849.75,sealed:false,
    orders:[{label:"Mid Trap",price:41.80,amount:786.66}]},
-  {ticker:"NUCG",name:"Geiger Counter Ltd (Nuclear)",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
+  {ticker:"NUCG",name:"VanEck Uranium and Nuclear Technologies UCITS ETF",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
    orders:[{label:"Liquidity Wick",price:38.95,amount:798}]},
-  {ticker:"COPG",name:"iShares Copper Miners UCITS ETF",role:"AI infrastructure deficit",shares:24,avgCost:49.571,bookValue:1189.71,sealed:false,
+  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit",shares:24,avgCost:49.571,bookValue:1189.71,sealed:false,
    orders:[{label:"Liquidity Wick",price:41.40,amount:798.43}]},
   {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets",shares:268,avgCost:5.02,bookValue:1345.09,sealed:true,
    orders:[]},
-  {ticker:"NAVY",name:"HANetf European Defence ETF",role:"European rearmament pure-play",shares:89,avgCost:9.356,bookValue:832.64,sealed:false,
+  {ticker:"NAVY",name:"VanEck Future of European Defence UCITS ETF",role:"European rearmament pure-play",shares:89,avgCost:9.356,bookValue:832.64,sealed:false,
    orders:[{label:"Mid Trap",price:9.00,amount:835},{label:"Deep Trap",price:8.70,amount:835}]},
 ];
 const SCENARIOS=[
-  {label:"A — Systemic Dislocation",prob:"75%",color:"#1d4ed8",desc:"Private credit + Section 122 cliff + kinetic escalation → SWDA ladder triggers"},
-  {label:"B — Purgatory",prob:"25%",color:"#d97706",desc:"Oct 31, VIX >15 · Deploy 50% dry powder (~£43,821) into XDEQ"},
+  {label:"A — Systemic Dislocation",prob:"85%",color:"#1d4ed8",desc:"Private credit + Section 122 cliff + kinetic escalation → SWDA ladder triggers"},
+  {label:"B — Purgatory",prob:"15%",color:"#d97706",desc:"Oct 31, VIX >15 · Deploy 50% dry powder (~£43,821) into XDEQ"},
   {label:"C — Normalisation",prob:"~0%",color:"#9ca3af",desc:"Eliminated · VIX 26 on 3 Mar makes 30-day MA <15 by Oct 31 impossible"},
 ];
 const LADDER=[{t:"T1",p:-22,v:77.83},{t:"T2",p:-25,v:74.83},{t:"T3",p:-32,v:67.85},{t:"T4",p:-35,v:64.86},{t:"T5",p:-42,v:57.87},{t:"T6",p:-45,v:54.88}];
