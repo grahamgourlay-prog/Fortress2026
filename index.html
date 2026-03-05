@@ -140,12 +140,13 @@ const SCENARIOS=[
   {label:"C — Normalisation",prob:"~0%",color:"#9ca3af",desc:"Eliminated · VIX 26 on 3 Mar makes 30-day MA <15 by Oct 31 impossible"},
 ];
 const LADDER=[{t:"T1",p:-22},{t:"T2",p:-25},{t:"T3",p:-32},{t:"T4",p:-35},{t:"T5",p:-42},{t:"T6",p:-45}];
-const FALLBACK_ATH=99.78; // last known SWDA ATH in GBP — updated dynamically on fetch
+const FALLBACK_ATH=99.95; // last known SWDA ATH in GBP (9,995p per broker Mar 2026)
 
 // Baseline = total amount transferred into SIPP
 const BASELINE = 33734.58;
 
 const SK="fortress2026_v6";
+const ATH_KEY="fortress2026_swda_ath";
 const gbp=n=>"£"+Math.abs(n).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
 const gbp0=n=>"£"+Math.abs(n).toLocaleString("en-GB",{maximumFractionDigits:0});
 const pct=(a,b)=>(a-b)/b*100;
@@ -154,6 +155,7 @@ const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=0;
+let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
 function mktValOrder(){return [...POSITIONS].sort((a,b)=>{const va=prices[a.ticker]>0?prices[a.ticker]*a.shares:a.bookValue;const vb=prices[b.ticker]>0?prices[b.ticker]*b.shares:b.bookValue;return vb-va;}).map(p=>p.ticker);}
 let positionOrder=mktValOrder();
@@ -193,8 +195,10 @@ function render(){renderDate();renderScenarios();renderMacro();renderPortfolio()
 function renderDate(){document.getElementById("hdate").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).toUpperCase()+"  ·  PASSIVE EXECUTION MANDATE"}
 function renderScenarios(){document.getElementById("scenarios").innerHTML=SCENARIOS.map(s=>`<div class="scenario" style="border-left:4px solid ${s.color}"><div class="scenario-label" style="color:${s.color}">${s.label}</div><div class="scenario-prob" style="color:${s.color}">${s.prob}</div><div class="scenario-desc">${s.desc}</div></div>`).join("")}
 
+function onATHChange(val){const v=parseFloat(val);if(!isNaN(v)&&v>0){manualATH=v;localStorage.setItem(ATH_KEY,v.toFixed(2));render()}}
+
 function renderMacro(){
-  const ath=macro.swdaATH||FALLBACK_ATH;
+  const ath=manualATH;
   const swdaPct=macro.swda?pct(macro.swda,ath):null;
   const t1price=ath*(1+LADDER[0].p/100); // T1 trigger = ATH × 0.78
   const t1gap=macro.swda?pct(t1price,macro.swda):null;
@@ -212,8 +216,9 @@ function renderMacro(){
      day:vixDayChg!=null?`${sgn(vixDayChg)}${vixDayChg.toFixed(2)} today`:null,
      note:macro.vix>25?"Scenario C eliminated":macro.vix>15?"Elevated":null,nc:macro.vix>25?"#b91c1c":"#92400e"},
   ];
+  const athHtml=`<span style="display:inline-flex;align-items:center;gap:4px;margin-left:auto"><span style="font-size:9px;font-weight:700;color:#92400e;letter-spacing:1px;text-transform:uppercase">SWDA ATH</span><span style="font-size:9px;color:#92400e;font-family:monospace">£</span><input type="number" step="0.01" min="1" value="${ath.toFixed(2)}" onchange="onATHChange(this.value)" title="Edit SWDA ATH (GBP) — update when SWDA makes a new high" style="width:58px;text-align:right;font-family:monospace;font-size:12px;font-weight:700;color:#78350f;padding:1px 4px;border-radius:3px;border:1px solid #fde68a;background:#fffbeb;outline:none"></span>`;
   document.getElementById("macro-bar").innerHTML=
-    `<div class="macro-header"><span class="label" style="color:#92400e">Macro Watch</span>${ts?`<span style="font-size:9px;color:#a8b8cc;font-family:monospace">updated ${ts}</span>`:""}${macro.src?`<span style="font-size:9px;color:#a8b8cc">· ${macro.src}</span>`:""}${!ts?`<span style="font-size:9px;color:#a8b8cc">— press Fetch to load</span>`:""}<button onclick="fetchAll()" style="margin-left:auto;background:#1a2e4a;color:#fff;border:none;border-radius:3px;padding:3px 12px;font-size:10px;font-weight:600;cursor:pointer">⟳ Refresh</button></div>
+    `<div class="macro-header"><span class="label" style="color:#92400e">Macro Watch</span>${ts?`<span style="font-size:9px;color:#a8b8cc;font-family:monospace">updated ${ts}</span>`:""}${macro.src?`<span style="font-size:9px;color:#a8b8cc">· ${macro.src}</span>`:""}${!ts?`<span style="font-size:9px;color:#a8b8cc">— press Fetch to load</span>`:""}${athHtml}<button onclick="fetchAll()" style="background:#1a2e4a;color:#fff;border:none;border-radius:3px;padding:3px 12px;font-size:10px;font-weight:600;cursor:pointer">⟳ Refresh</button></div>
     <div class="macro-chips">${chips.map(({k,val,extra,day,note,nc})=>`<div><div style="display:flex;align-items:baseline;gap:5px"><span style="font-size:10px;font-weight:700;color:#78350f;min-width:36px">${k}</span><span class="macro-chip-val">${val}</span>${extra?`<span class="macro-chip-chg" style="color:#4a5e78">${extra}</span>`:""}</div>${day?`<div style="font-size:9px;color:#7a8fa8;font-family:monospace">${day}</div>`:""} ${note?`<div class="macro-chip-note" style="color:${nc}">${note}</div>`:""}</div>`).join("")}</div>`;
 }
 

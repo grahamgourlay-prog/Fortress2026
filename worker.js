@@ -65,35 +65,27 @@ export default {
     const tickers = Object.keys(etfs);
     const symbols = Object.values(etfs);
 
-    // Special fetch for SWDA: derives ATH from 1-year daily closing prices.
-    // IMPORTANT: meta.fiftyTwoWeekHigh and 5yr monthly closes are both unreliable for SWDA.L —
-    // Yahoo Finance returns ~12,838 (an adjusted/total-return figure) instead of the actual
-    // ~9,995 GBp market price. The 1yr daily closes are raw unadjusted prices.
-    // Sanity filter: discard any close > 2× today's price to guard against future data anomalies.
+    // SWDA fetch: current price + prevClose only.
+    // ATH is NOT computed here — Yahoo Finance returns an adjusted/total-return figure
+    // (~12,838 GBp) for both fiftyTwoWeekHigh and historical closes, making server-side
+    // ATH calculation unreliable. ATH is instead managed as a user-editable value in the
+    // dashboard (persisted in localStorage), defaulting to the last known good value.
     const qSWDA = async () => {
       try {
         const r = await fetch(
-          `https://query1.finance.yahoo.com/v8/finance/chart/SWDA.L?interval=1d&range=1y`,
+          `https://query1.finance.yahoo.com/v8/finance/chart/SWDA.L?interval=1d&range=1d`,
           { headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "Accept": "application/json" } }
         );
         const data = await r.json();
         const result = data?.chart?.result?.[0];
         const meta = result?.meta;
-        if (!meta) return { value: null, prevClose: null, ath: null, currency: null, status: r.status };
+        if (!meta) return { value: null, prevClose: null, currency: null, status: r.status };
         const currency  = meta.currency ?? null;
         const value     = meta.regularMarketPrice ?? null;
         const prevClose = meta.chartPreviousClose ?? meta.regularMarketPreviousClose ?? null;
-        // Sanity cap: exclude closes more than 2× current price (catches adjusted/corrupted data)
-        const saneCap = (value ?? 15000) * 2;
-        const closes  = (result?.indicators?.quote?.[0]?.close ?? [])
-                          .filter(c => c !== null && c > 0 && c <= saneCap);
-        const histMax = closes.length > 0 ? Math.max(...closes) : null;
-        // ATH = max of valid 1yr daily closes and today's price
-        const candidates = [histMax, value].filter(v => v !== null && v > 0);
-        const athRaw = candidates.length > 0 ? Math.max(...candidates) : null;
-        return { value, prevClose, ath: athRaw, currency, status: r.status };
+        return { value, prevClose, currency, status: r.status };
       } catch (e) {
-        return { value: null, prevClose: null, ath: null, currency: null, status: "FETCH_ERROR", raw: e.message };
+        return { value: null, prevClose: null, currency: null, status: "FETCH_ERROR", raw: e.message };
       }
     };
 
@@ -109,8 +101,7 @@ export default {
         "SGLN.L":   sgln,
         "DFNG.L":   dfng,
         "^VIX":     vix,
-        "SWDA.L":   { value: swda.value, prevClose: swda.prevClose, ath: swda.ath, currency: swda.currency, status: swda.status },
-        "SWDA ATH (GBP)": swda.ath !== null ? toGBP(swda.ath, swda.currency) : null,
+        "SWDA.L":   { value: swda.value, prevClose: swda.prevClose, currency: swda.currency, status: swda.status },
         "BZ=F":     brent,
       }, null, 2), {
         headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
@@ -142,7 +133,6 @@ export default {
       macro: {
         swda:          toGBP(swdaResult.value,     swdaResult.currency),
         swdaPrevClose: toGBP(swdaResult.prevClose, swdaResult.currency),
-        swdaATH:       toGBP(swdaResult.ath,       swdaResult.currency),
         vix:           vixResult.value,
         vixPrevClose:  vixResult.prevClose,
         brent:         brentResult.value,
