@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Fortress 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; color: #1e2d40; font-size: 13px; padding: 14px 10px 60px; }
@@ -84,6 +85,11 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 .ladder-tiers { display: flex; gap: 4px 16px; flex-wrap: wrap; margin-top: 6px; }
 .ladder-tier { font-family: monospace; font-size: 11px; color: #4a5e78; }
 .footer { margin-top: 8px; font-size: 9px; color: #c8d2e0; line-height: 1.6; }
+.pos-drag-handle { cursor: grab; color: #c8d2e0; font-size: 18px; padding: 2px 8px 2px 2px; align-self: stretch; display: flex; align-items: center; user-select: none; flex-shrink: 0; }
+.pos-drag-handle:hover { color: #7a8fa8; }
+.pos-drag-handle:active { cursor: grabbing; }
+.sortable-ghost { opacity: 0.35; background: #e8f2ff !important; }
+.sortable-drag { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; animation: spin 0.7s linear infinite; }
 </style>
@@ -101,7 +107,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
   <button class="btn-fetch" id="btn-fetch" onclick="fetchAll()">⟳&nbsp; Fetch All Prices + Macro</button>
   <div>
     <div class="fetch-status" id="fetch-status" style="color:#7a8fa8">Ready · ~5 seconds</div>
-    <div class="fetch-hint">Restores from last session · manual entry always works</div>
+    <div class="fetch-hint">Restores from last session · manual entry always works · <a href="#" onclick="resetOrder();return false;" style="color:#a8b8cc;text-decoration:none;" onmouseover="this.style.color='#4a5e78'" onmouseout="this.style.color='#a8b8cc'">reset card order</a></div>
   </div>
 </div>
 <div id="positions"></div>
@@ -147,9 +153,12 @@ const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=0;
+let positionOrder=POSITIONS.map(p=>p.ticker);
+let _sortable=null;
 
-function saveState(){try{localStorage.setItem(SK,JSON.stringify({prices,prevCloses,macro,dryPowder}))}catch(_){}}
-function loadState(){try{const r=localStorage.getItem(SK);if(!r)return;const s=JSON.parse(r);prices=s.prices||{};prevCloses=s.prevCloses||{};macro=s.macro||{};dryPowder=typeof s.dryPowder==="number"?s.dryPowder:0;fetched=new Set(Object.keys(prices));setStatus("Restored from last session — press Fetch to refresh","ok")}catch(_){}}
+function saveState(){try{localStorage.setItem(SK,JSON.stringify({prices,prevCloses,macro,dryPowder,positionOrder}))}catch(_){}}
+function loadState(){try{const r=localStorage.getItem(SK);if(!r)return;const s=JSON.parse(r);prices=s.prices||{};prevCloses=s.prevCloses||{};macro=s.macro||{};dryPowder=typeof s.dryPowder==="number"?s.dryPowder:0;const defOrder=POSITIONS.map(p=>p.ticker);positionOrder=Array.isArray(s.positionOrder)&&s.positionOrder.length===defOrder.length?s.positionOrder:defOrder;fetched=new Set(Object.keys(prices));setStatus("Restored from last session — press Fetch to refresh","ok")}catch(_){}}
+function resetOrder(){positionOrder=POSITIONS.map(p=>p.ticker);saveState();renderPositions();}
 
 async function fetchAll(){
   const btn=document.getElementById("btn-fetch");
@@ -274,7 +283,8 @@ function renderPortfolio(){
 }
 
 function renderPositions(){
-  document.getElementById("positions").innerHTML=POSITIONS.map(pos=>{
+  const sorted=positionOrder.map(t=>POSITIONS.find(p=>p.ticker===t)).filter(Boolean);
+  document.getElementById("positions").innerHTML=sorted.map(pos=>{
     const lp=prices[pos.ticker]||0;
     const pc=prevCloses[pos.ticker]||0;
     const isF=fetched.has(pos.ticker);
@@ -298,8 +308,9 @@ function renderPositions(){
         }).join("")}</div>`
       :"";
 
-    return`<div class="pos-card" style="border-left:4px solid ${pos.sealed?"#fecaca":"#1a2e4a"}">
+    return`<div class="pos-card" data-ticker="${pos.ticker}" style="border-left:4px solid ${pos.sealed?"#fecaca":"#1a2e4a"}">
       <div class="pos-main">
+        <div class="pos-drag-handle" title="Drag to reorder">⠿</div>
         <div class="pos-identity">
           <div><span class="pos-ticker">${pos.ticker}</span>${pos.sealed?'<span class="badge badge-sealed">SEALED</span>':""}${isF&&lp>0?'<span class="badge badge-live">LIVE</span>':""}</div>
           <div class="pos-name">${pos.name}</div>
@@ -340,7 +351,19 @@ function renderPositions(){
       </div>
       ${ordersHtml}
     </div>`;
-  }).join("")
+  }).join("");
+  // Init drag-to-reorder
+  if(_sortable)_sortable.destroy();
+  _sortable=Sortable.create(document.getElementById("positions"),{
+    animation:150,
+    handle:".pos-drag-handle",
+    ghostClass:"sortable-ghost",
+    dragClass:"sortable-drag",
+    onEnd:function(){
+      positionOrder=Array.from(document.querySelectorAll("#positions [data-ticker]")).map(el=>el.dataset.ticker);
+      saveState();
+    }
+  });
 }
 
 function renderLadder(){document.getElementById("ladder").innerHTML=`<div class="label">SWDA Shadow Ladder · ATH £99.78 · Oct 31, 2026 deadline non-negotiable</div><div class="ladder-tiers">${LADDER.map(t=>`<div class="ladder-tier"><strong style="color:#1a2e4a">${t.t}</strong> ${t.p}% → £${t.v}</div>`).join("")}</div>`}
