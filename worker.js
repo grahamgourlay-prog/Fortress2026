@@ -65,20 +65,45 @@ export default {
     const tickers = Object.keys(etfs);
     const symbols = Object.values(etfs);
 
+    // Special fetch for SWDA: also pulls 5yr monthly history to calculate true ATH
+    const qSWDA = async () => {
+      try {
+        const r = await fetch(
+          `https://query1.finance.yahoo.com/v8/finance/chart/SWDA.L?interval=1mo&range=5y`,
+          { headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "Accept": "application/json" } }
+        );
+        const data = await r.json();
+        const result = data?.chart?.result?.[0];
+        const meta = result?.meta;
+        if (!meta) return { value: null, prevClose: null, ath: null, currency: null, status: r.status };
+        const currency  = meta.currency ?? null;
+        const value     = meta.regularMarketPrice ?? null;
+        const prevClose = meta.chartPreviousClose ?? meta.regularMarketPreviousClose ?? null;
+        const closes = result?.indicators?.quote?.[0]?.close?.filter(c => c !== null && c > 0) ?? [];
+        const histMax = closes.length > 0 ? Math.max(...closes) : null;
+        const athRaw  = histMax !== null && value !== null ? Math.max(histMax, value)
+                      : histMax ?? value;
+        return { value, prevClose, ath: athRaw, currency, status: r.status };
+      } catch (e) {
+        return { value: null, prevClose: null, ath: null, currency: null, status: "FETCH_ERROR", raw: e.message };
+      }
+    };
+
     if (debug) {
       const [sgln, dfng, vix, swda, brent] = await Promise.all([
         qFull("SGLN.L"),
         qFull("DFNG.L"),
         qFull("^VIX"),
-        qFull("SWDA.L"),
+        qSWDA(),
         qFull("BZ=F"),
       ]);
       return new Response(JSON.stringify({
-        "SGLN.L": sgln,
-        "DFNG.L": dfng,
-        "^VIX":   vix,
-        "SWDA.L": swda,
-        "BZ=F":   brent,
+        "SGLN.L":   sgln,
+        "DFNG.L":   dfng,
+        "^VIX":     vix,
+        "SWDA.L":   { value: swda.value, prevClose: swda.prevClose, ath: swda.ath, currency: swda.currency, status: swda.status },
+        "SWDA ATH (GBP)": swda.ath !== null ? toGBP(swda.ath, swda.currency) : null,
+        "BZ=F":     brent,
       }, null, 2), {
         headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       });
@@ -87,7 +112,7 @@ export default {
     // Normal mode: fetch all in parallel
     const [etfResults, swdaResult, vixResult, brentResult] = await Promise.all([
       Promise.all(symbols.map(s => qFull(s))),
-      qFull("SWDA.L"),
+      qSWDA(),
       qFull("^VIX"),
       qFull("BZ=F"),
     ]);
@@ -103,15 +128,13 @@ export default {
       if (pv !== null) prevClose[ticker] = pv;
     });
 
-    // SWDA prevClose (for macro display)
-    const swdaPrevClose = toGBP(swdaResult.prevClose, swdaResult.currency);
-
     return new Response(JSON.stringify({
       prices,
       prevClose,
       macro: {
-        swda:          toGBP(swdaResult.value, swdaResult.currency),
-        swdaPrevClose: swdaPrevClose,
+        swda:          toGBP(swdaResult.value,     swdaResult.currency),
+        swdaPrevClose: toGBP(swdaResult.prevClose, swdaResult.currency),
+        swdaATH:       toGBP(swdaResult.ath,       swdaResult.currency),
         vix:           vixResult.value,
         vixPrevClose:  vixResult.prevClose,
         brent:         brentResult.value,

@@ -139,7 +139,8 @@ const SCENARIOS=[
   {label:"B — Purgatory",prob:"15%",color:"#d97706",desc:"Oct 31, VIX >15 · Deploy 50% dry powder (~£43,821) into XDEQ"},
   {label:"C — Normalisation",prob:"~0%",color:"#9ca3af",desc:"Eliminated · VIX 26 on 3 Mar makes 30-day MA <15 by Oct 31 impossible"},
 ];
-const LADDER=[{t:"T1",p:-22,v:77.83},{t:"T2",p:-25,v:74.83},{t:"T3",p:-32,v:67.85},{t:"T4",p:-35,v:64.86},{t:"T5",p:-42,v:57.87},{t:"T6",p:-45,v:54.88}];
+const LADDER=[{t:"T1",p:-22},{t:"T2",p:-25},{t:"T3",p:-32},{t:"T4",p:-35},{t:"T5",p:-42},{t:"T6",p:-45}];
+const FALLBACK_ATH=99.78; // last known SWDA ATH in GBP — updated dynamically on fetch
 
 // Baseline = total amount transferred into SIPP
 const BASELINE = 33734.58;
@@ -176,7 +177,7 @@ async function fetchAll(){
     prices=np;
     prevCloses=res.prevClose||{};
     fetched=new Set(Object.keys(np));
-    macro={swda:res.macro?.swda||null,swdaPrevClose:res.macro?.swdaPrevClose||null,brent:res.macro?.brent||null,vix:res.macro?.vix||null,vixPrevClose:res.macro?.vixPrevClose||null,ts:res.ts||Date.now(),src:res.src||""};
+    macro={swda:res.macro?.swda||null,swdaPrevClose:res.macro?.swdaPrevClose||null,swdaATH:res.macro?.swdaATH||null,brent:res.macro?.brent||null,vix:res.macro?.vix||null,vixPrevClose:res.macro?.vixPrevClose||null,ts:res.ts||Date.now(),src:res.src||""};
     saveState();
     const t=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
     setStatus(`✓ ${Object.keys(np).length}/${POSITIONS.length} prices found — ${t}`,"ok");
@@ -193,8 +194,10 @@ function renderDate(){document.getElementById("hdate").textContent=new Date().to
 function renderScenarios(){document.getElementById("scenarios").innerHTML=SCENARIOS.map(s=>`<div class="scenario" style="border-left:4px solid ${s.color}"><div class="scenario-label" style="color:${s.color}">${s.label}</div><div class="scenario-prob" style="color:${s.color}">${s.prob}</div><div class="scenario-desc">${s.desc}</div></div>`).join("")}
 
 function renderMacro(){
-  const swdaPct=macro.swda?pct(macro.swda,99.78):null;
-  const t1gap=macro.swda?pct(77.83,macro.swda):null;
+  const ath=macro.swdaATH||FALLBACK_ATH;
+  const swdaPct=macro.swda?pct(macro.swda,ath):null;
+  const t1price=ath*(1+LADDER[0].p/100); // T1 trigger = ATH × 0.78
+  const t1gap=macro.swda?pct(t1price,macro.swda):null;
   const ts=macro.ts?new Date(macro.ts).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):null;
   const swdaDayPct=macro.swda&&macro.swdaPrevClose?pct(macro.swda,macro.swdaPrevClose):null;
   const vixDayChg=macro.vix&&macro.vixPrevClose?macro.vix-macro.vixPrevClose:null;
@@ -368,7 +371,14 @@ function renderPositions(){
   });
 }
 
-function renderLadder(){document.getElementById("ladder").innerHTML=`<div class="label">SWDA Shadow Ladder · ATH £99.78 · Oct 31, 2026 deadline non-negotiable</div><div class="ladder-tiers">${LADDER.map(t=>`<div class="ladder-tier"><strong style="color:#1a2e4a">${t.t}</strong> ${t.p}% → £${t.v}</div>`).join("")}</div>`}
+function renderLadder(){
+  const ath=macro.swdaATH||FALLBACK_ATH;
+  const athLabel=`£${ath.toFixed(2)}${macro.swdaATH?"":" *"}`;
+  document.getElementById("ladder").innerHTML=
+    `<div class="label">SWDA Shadow Ladder · ATH ${athLabel} · Oct 31, 2026 deadline non-negotiable</div>`+
+    `<div class="ladder-tiers">${LADDER.map(t=>{const v=(ath*(1+t.p/100)).toFixed(2);return`<div class="ladder-tier"><strong style="color:#1a2e4a">${t.t}</strong> ${t.p}% → £${v}</div>`;}).join("")}</div>`+
+    `${!macro.swdaATH?`<div style="font-size:9px;color:#a8b8cc;margin-top:4px">* using last known ATH — fetch prices to update</div>`:""}`;
+}
 
 loadState();render();
 </script>
