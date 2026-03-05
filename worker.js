@@ -65,25 +65,31 @@ export default {
     const tickers = Object.keys(etfs);
     const symbols = Object.values(etfs);
 
-    // Special fetch for SWDA: uses fiftyTwoWeekHigh from meta as ATH reference.
-    // Note: historical monthly closes were tried (range=5y) but produced spurious high values
-    // that inflated ATH incorrectly. fiftyTwoWeekHigh matches the broker "1Y High" exactly.
+    // Special fetch for SWDA: derives ATH from 1-year daily closing prices.
+    // IMPORTANT: meta.fiftyTwoWeekHigh and 5yr monthly closes are both unreliable for SWDA.L —
+    // Yahoo Finance returns ~12,838 (an adjusted/total-return figure) instead of the actual
+    // ~9,995 GBp market price. The 1yr daily closes are raw unadjusted prices.
+    // Sanity filter: discard any close > 2× today's price to guard against future data anomalies.
     const qSWDA = async () => {
       try {
         const r = await fetch(
-          `https://query1.finance.yahoo.com/v8/finance/chart/SWDA.L?interval=1d&range=1d`,
+          `https://query1.finance.yahoo.com/v8/finance/chart/SWDA.L?interval=1d&range=1y`,
           { headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36", "Accept": "application/json" } }
         );
         const data = await r.json();
         const result = data?.chart?.result?.[0];
         const meta = result?.meta;
         if (!meta) return { value: null, prevClose: null, ath: null, currency: null, status: r.status };
-        const currency       = meta.currency ?? null;
-        const value          = meta.regularMarketPrice ?? null;
-        const prevClose      = meta.chartPreviousClose ?? meta.regularMarketPreviousClose ?? null;
-        const fiftyTwoWkHigh = meta.fiftyTwoWeekHigh ?? null; // intraday high — matches broker "1Y High"
-        // ATH = max of: 52-week intraday high and today's price
-        const candidates = [fiftyTwoWkHigh, value].filter(v => v !== null && v > 0);
+        const currency  = meta.currency ?? null;
+        const value     = meta.regularMarketPrice ?? null;
+        const prevClose = meta.chartPreviousClose ?? meta.regularMarketPreviousClose ?? null;
+        // Sanity cap: exclude closes more than 2× current price (catches adjusted/corrupted data)
+        const saneCap = (value ?? 15000) * 2;
+        const closes  = (result?.indicators?.quote?.[0]?.close ?? [])
+                          .filter(c => c !== null && c > 0 && c <= saneCap);
+        const histMax = closes.length > 0 ? Math.max(...closes) : null;
+        // ATH = max of valid 1yr daily closes and today's price
+        const candidates = [histMax, value].filter(v => v !== null && v > 0);
         const athRaw = candidates.length > 0 ? Math.max(...candidates) : null;
         return { value, prevClose, ath: athRaw, currency, status: r.status };
       } catch (e) {
