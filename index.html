@@ -24,15 +24,32 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 .macro-chip-val { font-family: monospace; font-size: 13px; font-weight: 700; color: #1a2e4a; }
 .macro-chip-chg { font-family: monospace; font-size: 10px; font-weight: 600; }
 .macro-chip-note { font-size: 9px; font-weight: 600; margin-top: 1px; }
-.pills { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-.pill { background: #fff; border: 1px solid #dde3ec; padding: 10px 14px; flex: 1 1 100px; min-width: 90px; }
-.pill-val { font-family: monospace; font-size: 17px; font-weight: 700; color: #1a2e4a; }
-.pill-sub { font-size: 10px; color: #a8b8cc; margin-top: 2px; }
+
+/* ── Portfolio section ──────────────────────────────────────── */
+.portfolio-section { background: #fff; border: 1px solid #dde3ec; border-top: 3px solid #1a2e4a; padding: 12px 14px; margin-bottom: 12px; }
+.portfolio-section-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a8fa8; margin-bottom: 10px; }
+.portfolio-grid { display: flex; gap: 8px 0; flex-wrap: wrap; }
+.portfolio-col { flex: 1 1 120px; padding: 0 12px; border-right: 1px solid #eef1f6; }
+.portfolio-col:first-child { padding-left: 0; }
+.portfolio-col:last-child { border-right: none; }
+.portfolio-val { font-family: monospace; font-size: 17px; font-weight: 700; color: #1a2e4a; margin-top: 3px; }
+.portfolio-sub { font-size: 10px; color: #7a8fa8; margin-top: 2px; }
+.portfolio-total-col { flex: 1 1 160px; padding: 0 12px; border-left: 2px solid #1a2e4a; }
+.portfolio-total-val { font-family: monospace; font-size: 20px; font-weight: 700; color: #1a2e4a; margin-top: 3px; }
+.baseline-row { margin-top: 10px; padding-top: 8px; border-top: 1px solid #eef1f6; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.baseline-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #7a8fa8; }
+.baseline-val { font-family: monospace; font-size: 12px; font-weight: 700; }
+.dp-input { width: 90px; text-align: right; font-family: monospace; font-size: 15px; font-weight: 700; color: #1a2e4a; padding: 2px 5px; border-radius: 3px; border: 1px solid #c8d2e0; background: #f1f4f8; outline: none; }
+.dp-input:focus { border-color: #93c5fd; background: #eff6ff; }
+
+/* ── Fetch bar ──────────────────────────────────────────────── */
 .fetch-bar { background: #fff; border: 1px solid #dde3ec; padding: 10px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .btn-fetch { background: #1a2e4a; color: #fff; border: none; border-radius: 4px; padding: 9px 18px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 .btn-fetch:disabled { background: #9ca3af; cursor: default; }
 .fetch-status { font-family: monospace; font-size: 10px; }
 .fetch-hint { font-size: 9px; color: #a8b8cc; margin-top: 2px; }
+
+/* ── Position cards ─────────────────────────────────────────── */
 .pos-card { background: #fff; border: 1px solid #dde3ec; margin-bottom: 7px; }
 .pos-main { padding: 10px 12px; display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
 .pos-identity { flex: 1 1 140px; min-width: 120px; }
@@ -42,19 +59,25 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 .badge { font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; margin-left: 4px; }
 .badge-sealed { color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; }
 .badge-live { color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; }
-.pos-fields { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.pos-fields { display: flex; gap: 10px 14px; flex-wrap: wrap; align-items: flex-start; }
 .field { text-align: right; min-width: 52px; }
 .field-val { font-family: monospace; font-size: 12px; font-weight: 600; color: #1a2e4a; }
 .live-input { width: 66px; text-align: right; font-family: monospace; font-size: 12px; padding: 2px 5px; border-radius: 3px; border: 1px solid #c8d2e0; background: #f1f4f8; color: #1a2e4a; outline: none; }
+.live-input:focus { border-color: #93c5fd; background: #eff6ff; }
 .live-input.fetched { border-color: #93c5fd; background: #eff6ff; }
 .pl-pos { color: #16803c; } .pl-neg { color: #b91c1c; }
-.btn-toggle { background: none; border: 1px solid #dde3ec; border-radius: 3px; padding: 3px 8px; font-size: 10px; color: #4a5e78; cursor: pointer; white-space: nowrap; align-self: flex-start; }
+.day-pos { color: #16803c; font-family: monospace; font-size: 10px; }
+.day-neg { color: #b91c1c; font-family: monospace; font-size: 10px; }
+
+/* ── Orders panel ───────────────────────────────────────────── */
 .orders-panel { border-top: 1px solid #f1f4f8; background: #f8f9fb; padding: 10px 12px; }
 .order-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
-.order-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #7a8fa8; min-width: 90px; flex-shrink: 0; }
+.order-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #7a8fa8; min-width: 110px; flex-shrink: 0; }
 .order-price { font-family: monospace; font-size: 11px; color: #1a2e4a; min-width: 52px; }
 .order-amt { font-family: monospace; font-size: 11px; color: #4a5e78; min-width: 46px; }
 .order-pct { font-family: monospace; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; }
+
+/* ── Totals / Ladder ────────────────────────────────────────── */
 .totals { background: #fff; border: 2px solid #1a2e4a; padding: 12px 14px; margin-top: 4px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
 .total-val { font-family: monospace; font-size: 16px; font-weight: 700; }
 .ladder { background: #fff; border: 1px solid #dde3ec; padding: 10px 14px; margin-top: 10px; }
@@ -73,18 +96,17 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div class="scenarios" id="scenarios"></div>
 <div class="macro" id="macro-bar"></div>
-<div class="pills" id="pills"></div>
+<div class="portfolio-section" id="portfolio-section"></div>
 <div class="fetch-bar">
   <button class="btn-fetch" id="btn-fetch" onclick="fetchAll()">⟳&nbsp; Fetch All Prices + Macro</button>
   <div>
-    <div class="fetch-status" id="fetch-status" style="color:#7a8fa8">Ready · ~15 seconds</div>
+    <div class="fetch-status" id="fetch-status" style="color:#7a8fa8">Ready · ~5 seconds</div>
     <div class="fetch-hint">Restores from last session · manual entry always works</div>
   </div>
 </div>
 <div id="positions"></div>
-<div class="totals" id="totals"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price x shares. Prices persist via localStorage. Last edited: 04 Mar 2026</div>
+<div class="footer">Market value = live price × shares · Prices persist via localStorage · Last edited: 05 Mar 2026</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:38,avgCost:75.42,bookValue:2865.84,sealed:false,
@@ -112,27 +134,217 @@ const SCENARIOS=[
   {label:"C — Normalisation",prob:"~0%",color:"#9ca3af",desc:"Eliminated · VIX 26 on 3 Mar makes 30-day MA <15 by Oct 31 impossible"},
 ];
 const LADDER=[{t:"T1",p:-22,v:77.83},{t:"T2",p:-25,v:74.83},{t:"T3",p:-32,v:67.85},{t:"T4",p:-35,v:64.86},{t:"T5",p:-42,v:57.87},{t:"T6",p:-45,v:54.88}];
-const SK="fortress2026_v5";
-const gbp=n=>"£"+Math.abs(n).toLocaleString("en-GB",{maximumFractionDigits:0});
+
+// Baseline = total amount transferred into SIPP
+const BASELINE = 33734.58;
+
+const SK="fortress2026_v6";
+const gbp=n=>"£"+Math.abs(n).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
+const gbp0=n=>"£"+Math.abs(n).toLocaleString("en-GB",{maximumFractionDigits:0});
 const pct=(a,b)=>(a-b)/b*100;
 const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
-let prices={},fetched=new Set(),macro={};
-function saveState(){try{localStorage.setItem(SK,JSON.stringify({prices,macro}))}catch(_){}}
-function loadState(){try{const r=localStorage.getItem(SK);if(!r)return;const s=JSON.parse(r);prices=s.prices||{};macro=s.macro||{};fetched=new Set(Object.keys(prices));setStatus("Restored from last session — press Fetch to refresh","ok")}catch(_){}}
-async function fetchAll(){const btn=document.getElementById("btn-fetch");btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Fetching…';setStatus("Fetching live prices from Finnhub…","neutral");try{const r=await fetch("https://aged-sea-a3e0.grahamgourlay.workers.dev");if(!r.ok)throw new Error(`HTTP ${r.status}`);const res=await r.json();if(!res.prices)throw new Error("Invalid response");const np={};POSITIONS.forEach(p=>{const v=res.prices?.[p.ticker];if(v&&v>0)np[p.ticker]=v});prices=np;fetched=new Set(Object.keys(np));macro={swda:res.macro?.swda||null,brent:res.macro?.brent||null,vix:res.macro?.vix||null,ts:res.ts||Date.now(),src:res.src||""};saveState();const t=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});setStatus(`✓ ${Object.keys(np).length}/${POSITIONS.length} prices found — ${t}`,"ok")}catch(e){setStatus(`✗ ${e.message} — try manually`,"err")}btn.disabled=false;btn.innerHTML="⟳&nbsp; Fetch All Prices + Macro";render()}
+
+let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=0;
+
+function saveState(){try{localStorage.setItem(SK,JSON.stringify({prices,prevCloses,macro,dryPowder}))}catch(_){}}
+function loadState(){try{const r=localStorage.getItem(SK);if(!r)return;const s=JSON.parse(r);prices=s.prices||{};prevCloses=s.prevCloses||{};macro=s.macro||{};dryPowder=typeof s.dryPowder==="number"?s.dryPowder:0;fetched=new Set(Object.keys(prices));setStatus("Restored from last session — press Fetch to refresh","ok")}catch(_){}}
+
+async function fetchAll(){
+  const btn=document.getElementById("btn-fetch");
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Fetching…';
+  setStatus("Fetching live prices from Yahoo Finance…","neutral");
+  try{
+    const r=await fetch("https://aged-sea-a3e0.grahamgourlay.workers.dev");
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    const res=await r.json();
+    if(!res.prices)throw new Error("Invalid response");
+    const np={};
+    POSITIONS.forEach(p=>{const v=res.prices?.[p.ticker];if(v&&v>0)np[p.ticker]=v});
+    prices=np;
+    prevCloses=res.prevClose||{};
+    fetched=new Set(Object.keys(np));
+    macro={swda:res.macro?.swda||null,swdaPrevClose:res.macro?.swdaPrevClose||null,brent:res.macro?.brent||null,vix:res.macro?.vix||null,vixPrevClose:res.macro?.vixPrevClose||null,ts:res.ts||Date.now(),src:res.src||""};
+    saveState();
+    const t=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
+    setStatus(`✓ ${Object.keys(np).length}/${POSITIONS.length} prices found — ${t}`,"ok");
+  }catch(e){setStatus(`✗ ${e.message} — try manually`,"err")}
+  btn.disabled=false;btn.innerHTML="⟳&nbsp; Fetch All Prices + Macro";render();
+}
+
 function setStatus(msg,type){const el=document.getElementById("fetch-status");el.textContent=msg;el.style.color=type==="ok"?"#16803c":type==="err"?"#b91c1c":"#7a8fa8"}
 function onPriceChange(ticker,val){const v=parseFloat(val);if(!isNaN(v)&&v>0){prices[ticker]=v;fetched.delete(ticker)}else{delete prices[ticker]}saveState();render()}
-function render(){renderDate();renderScenarios();renderMacro();renderPills();renderPositions();renderTotals();renderLadder()}
+function onDryPowderChange(val){const v=parseFloat(val.replace(/[^0-9.]/g,""));dryPowder=isNaN(v)?0:v;saveState();render()}
+
+function render(){renderDate();renderScenarios();renderMacro();renderPortfolio();renderPositions();renderLadder()}
 function renderDate(){document.getElementById("hdate").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).toUpperCase()+"  ·  PASSIVE EXECUTION MANDATE"}
 function renderScenarios(){document.getElementById("scenarios").innerHTML=SCENARIOS.map(s=>`<div class="scenario" style="border-left:4px solid ${s.color}"><div class="scenario-label" style="color:${s.color}">${s.label}</div><div class="scenario-prob" style="color:${s.color}">${s.prob}</div><div class="scenario-desc">${s.desc}</div></div>`).join("")}
-function renderMacro(){const swdaPct=macro.swda?pct(macro.swda,99.78):null;const t1gap=macro.swda?pct(77.83,macro.swda):null;const ts=macro.ts?new Date(macro.ts).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):null;const chips=[{k:"SWDA",val:macro.swda?`${(macro.swda*100).toFixed(0)}p`:"—",extra:swdaPct!=null?`${sgn(swdaPct)}${swdaPct.toFixed(1)}% from ATH`:null,note:t1gap!=null?`T1 trigger ${Math.abs(t1gap).toFixed(1)}% away`:null,nc:"#16803c"},{k:"Brent",val:macro.brent?`$${macro.brent.toFixed(2)}`:"—",extra:null,note:macro.brent>80?"⚠ Supply shock active":null,nc:"#b91c1c"},{k:"VIX",val:macro.vix?macro.vix.toFixed(2):"—",extra:null,note:macro.vix>25?"Scenario C eliminated":macro.vix>15?"Elevated":null,nc:macro.vix>25?"#b91c1c":"#92400e"}];document.getElementById("macro-bar").innerHTML=`<div class="macro-header"><span class="label" style="color:#92400e">Macro Watch</span>${ts?`<span style="font-size:9px;color:#a8b8cc;font-family:monospace">updated ${ts}</span>`:""}${macro.src?`<span style="font-size:9px;color:#a8b8cc">· ${macro.src}</span>`:""}${!ts?`<span style="font-size:9px;color:#a8b8cc">— press Fetch to load</span>`:""}<button onclick="fetchAll()" style="margin-left:auto;background:#1a2e4a;color:#fff;border:none;border-radius:3px;padding:3px 12px;font-size:10px;font-weight:600;cursor:pointer">⟳ Refresh</button></div><div class="macro-chips">${chips.map(({k,val,extra,note,nc})=>`<div><div style="display:flex;align-items:baseline;gap:5px"><span style="font-size:10px;font-weight:700;color:#78350f;min-width:36px">${k}</span><span class="macro-chip-val">${val}</span>${extra?`<span class="macro-chip-chg" style="color:#4a5e78">${extra}</span>`:""}</div>${note?`<div class="macro-chip-note" style="color:${nc}">${note}</div>`:""}</div>`).join("")}</div>`}
-function renderPills(){const tB=POSITIONS.reduce((s,p)=>s+p.bookValue,0);const tP=POSITIONS.reduce((s,p)=>s+p.orders.reduce((a,o)=>a+o.amount,0),0);const tO=POSITIONS.reduce((s,p)=>s+p.orders.length,0);const lv=POSITIONS.map(p=>prices[p.ticker]>0?prices[p.ticker]*p.shares:null);const al=lv.every(v=>v!==null);const tL=al?lv.reduce((a,v)=>a+v,0):null;const plT=tL!==null?tL-tB:null;const plP=plT!==null?pct(tL,tB):null;const defs=[{label:"Book Value",value:gbp(tB),sub:"executed positions",color:"#1d4ed8"},{label:"Pending Capital",value:gbp(tP),sub:"GTC trap orders",color:"#d97706"},{label:"Instruments",value:"9",sub:"positions held",color:"#7c3aed"},{label:"Live Traps",value:tO,sub:"GTC limit orders",color:"#059669"},...(tL!==null?[{label:"Market Value",value:gbp(tL),sub:`${sgn(plP)}${plP.toFixed(1)}% · ${plT>=0?"+":"−"}${gbp(Math.abs(plT))}`,color:plT>=0?"#16803c":"#b91c1c"}]:[])];document.getElementById("pills").innerHTML=defs.map(p=>`<div class="pill" style="border-top:3px solid ${p.color}"><div class="label">${p.label}</div><div class="pill-val">${p.value}</div><div class="pill-sub">${p.sub}</div></div>`).join("")}
-function renderPositions(){document.getElementById("positions").innerHTML=POSITIONS.map(pos=>{const lp=prices[pos.ticker]||0;const isF=fetched.has(pos.ticker);const ref=lp>0?lp:pos.avgCost;const mkt=lp>0?lp*pos.shares:null;const plv=mkt!==null?mkt-pos.bookValue:null;const plp=lp>0?pct(lp,pos.avgCost):null;const pp=plv!==null&&plv>=0;const id=`orders_${pos.ticker}`;const oh=pos.orders.length>0?`<div class="orders-panel" id="${id}" style="display:none"><div class="label" style="margin-bottom:6px">Pending Orders — % ${lp>0?"vs live":"vs avg cost"}</div>${pos.orders.map(o=>{const d=pct(o.price,ref);const pr=o.price<10?`£${o.price.toFixed(2)}`:`${o.price.toFixed(2)}p`;return`<div class="order-row"><span class="order-label">${o.label}</span><span class="order-price">${pr}</span><span class="order-amt">${gbp(o.amount)}</span><span class="order-pct" style="${dStyle(d)}">${sgn(d)}${d.toFixed(1)}%</span></div>`}).join("")}</div>`:"";return`<div class="pos-card" style="border-left:4px solid ${pos.sealed?"#fecaca":"#1a2e4a"}"><div class="pos-main"><div class="pos-identity"><div><span class="pos-ticker">${pos.ticker}</span>${pos.sealed?'<span class="badge badge-sealed">SEALED</span>':""}${isF&&lp>0?'<span class="badge badge-live">LIVE</span>':""}</div><div class="pos-name">${pos.name}</div><div class="pos-role">${pos.role}</div></div><div class="pos-fields"><div class="field"><div class="label">Shares</div><div class="field-val">${pos.shares}</div></div><div class="field"><div class="label">Avg Cost</div><div class="field-val">£${fmt(pos.avgCost)}</div></div><div class="field"><div class="label">Book</div><div class="field-val">${gbp(pos.bookValue)}</div></div><div class="field" style="min-width:66px"><div class="label">Live £</div><input class="live-input ${isF&&lp>0?"fetched":""}" type="number" step="0.01" min="0" placeholder="—" value="${lp>0?lp:""}" onchange="onPriceChange('${pos.ticker}',this.value)"></div>${plv!==null?`<div class="field" style="min-width:56px"><div class="label">P&L</div><div class="field-val ${pp?"pl-pos":"pl-neg"}">${pp?"+":"−"}${gbp(Math.abs(plv))}</div><div style="font-family:monospace;font-size:10px;color:${pp?"#16803c":"#b91c1c"}">${sgn(plp)}${plp.toFixed(1)}%</div></div>`:""}</div>${pos.orders.length>0?`<button class="btn-toggle" onclick="toggleOrders('${id}',this)">▼ ${pos.orders.length} order${pos.orders.length>1?"s":""}</button>`:""}</div>${oh}</div>`}).join("")}
-function toggleOrders(id,btn){const el=document.getElementById(id);const o=el.style.display==="block";el.style.display=o?"none":"block";const c=btn.textContent.match(/\d+/)?.[0]||"?";btn.textContent=o?`▼ ${c} order${c>1?"s":""}`:"\u25b2 Hide"}
-function renderTotals(){const tB=POSITIONS.reduce((s,p)=>s+p.bookValue,0);const tP=POSITIONS.reduce((s,p)=>s+p.orders.reduce((a,o)=>a+o.amount,0),0);const tO=POSITIONS.reduce((s,p)=>s+p.orders.length,0);const lv=POSITIONS.map(p=>prices[p.ticker]>0?prices[p.ticker]*p.shares:null);const al=lv.every(v=>v!==null);const tL=al?lv.reduce((a,v)=>a+v,0):null;const plT=tL!==null?tL-tB:null;const plP=plT!==null?pct(tL,tB):null;let h=`<div class="total-item"><div class="label">Total Book</div><div class="total-val" style="color:#1a2e4a">${gbp(tB)}</div></div>`;if(tL!==null){h+=`<div class="total-item"><div class="label">Market Value</div><div class="total-val" style="color:#1a2e4a">${gbp(tL)}</div></div><div class="total-item"><div class="label">Unrealised P&L</div><div class="total-val" style="color:${plT>=0?"#16803c":"#b91c1c"}">${plT>=0?"+":"−"}${gbp(Math.abs(plT))} / ${sgn(plP)}${plP.toFixed(1)}%</div></div>`}h+=`<div style="margin-left:auto;font-size:10px;color:#a8b8cc;font-family:monospace;text-align:right">${tO} GTC orders · ${gbp(tP)} pending</div>`;document.getElementById("totals").innerHTML=h}
+
+function renderMacro(){
+  const swdaPct=macro.swda?pct(macro.swda,99.78):null;
+  const t1gap=macro.swda?pct(77.83,macro.swda):null;
+  const ts=macro.ts?new Date(macro.ts).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):null;
+  const swdaDayPct=macro.swda&&macro.swdaPrevClose?pct(macro.swda,macro.swdaPrevClose):null;
+  const vixDayChg=macro.vix&&macro.vixPrevClose?macro.vix-macro.vixPrevClose:null;
+  const chips=[
+    {k:"SWDA",val:macro.swda?`${(macro.swda*100).toFixed(0)}p`:"—",
+     extra:swdaPct!=null?`${sgn(swdaPct)}${swdaPct.toFixed(1)}% from ATH`:null,
+     day:swdaDayPct!=null?`${sgn(swdaDayPct)}${swdaDayPct.toFixed(2)}% today`:null,
+     note:t1gap!=null?`T1 trigger ${Math.abs(t1gap).toFixed(1)}% away`:null,nc:"#16803c"},
+    {k:"Brent",val:macro.brent?`$${macro.brent.toFixed(2)}`:"—",extra:null,day:null,
+     note:macro.brent>80?"⚠ Supply shock active":null,nc:"#b91c1c"},
+    {k:"VIX",val:macro.vix?macro.vix.toFixed(2):"—",extra:null,
+     day:vixDayChg!=null?`${sgn(vixDayChg)}${vixDayChg.toFixed(2)} today`:null,
+     note:macro.vix>25?"Scenario C eliminated":macro.vix>15?"Elevated":null,nc:macro.vix>25?"#b91c1c":"#92400e"},
+  ];
+  document.getElementById("macro-bar").innerHTML=
+    `<div class="macro-header"><span class="label" style="color:#92400e">Macro Watch</span>${ts?`<span style="font-size:9px;color:#a8b8cc;font-family:monospace">updated ${ts}</span>`:""}${macro.src?`<span style="font-size:9px;color:#a8b8cc">· ${macro.src}</span>`:""}${!ts?`<span style="font-size:9px;color:#a8b8cc">— press Fetch to load</span>`:""}<button onclick="fetchAll()" style="margin-left:auto;background:#1a2e4a;color:#fff;border:none;border-radius:3px;padding:3px 12px;font-size:10px;font-weight:600;cursor:pointer">⟳ Refresh</button></div>
+    <div class="macro-chips">${chips.map(({k,val,extra,day,note,nc})=>`<div><div style="display:flex;align-items:baseline;gap:5px"><span style="font-size:10px;font-weight:700;color:#78350f;min-width:36px">${k}</span><span class="macro-chip-val">${val}</span>${extra?`<span class="macro-chip-chg" style="color:#4a5e78">${extra}</span>`:""}</div>${day?`<div style="font-size:9px;color:#7a8fa8;font-family:monospace">${day}</div>`:""} ${note?`<div class="macro-chip-note" style="color:${nc}">${note}</div>`:""}</div>`).join("")}</div>`;
+}
+
+function renderPortfolio(){
+  const tB=POSITIONS.reduce((s,p)=>s+p.bookValue,0);
+  const tP=POSITIONS.reduce((s,p)=>s+p.orders.reduce((a,o)=>a+o.amount,0),0);
+  const lv=POSITIONS.map(p=>prices[p.ticker]>0?prices[p.ticker]*p.shares:null);
+  const allLive=lv.every(v=>v!==null);
+  const tL=allLive?lv.reduce((a,v)=>a+v,0):null;
+
+  // Daily P&L across all positions
+  const dailyVals=POSITIONS.map(p=>{
+    const lp=prices[p.ticker];
+    const pc=prevCloses[p.ticker];
+    if(!lp||!pc)return null;
+    return(lp-pc)*p.shares;
+  });
+  const allDay=dailyVals.every(v=>v!==null);
+  const tDay=allDay?dailyVals.reduce((a,v)=>a+v,0):null;
+  const tDayPct=tL&&tDay!==null?tDay/(tL-tDay)*100:null;
+
+  // Portfolio total = market value + pending capital + dry powder
+  const portfolioTotal=tL!==null?tL+tP+dryPowder:null;
+
+  // Gain vs baseline
+  const baselineGain=portfolioTotal!==null?portfolioTotal-BASELINE:null;
+  const baselinePct=baselineGain!==null?baselineGain/BASELINE*100:null;
+
+  // Book P&L
+  const bookPL=tL!==null?tL-tB:null;
+  const bookPct=bookPL!==null?pct(tL,tB):null;
+
+  document.getElementById("portfolio-section").innerHTML=`
+    <div class="portfolio-section-title">Portfolio Value</div>
+    <div class="portfolio-grid">
+      <div class="portfolio-col">
+        <div class="label">Market Value</div>
+        <div class="portfolio-val">${tL!==null?gbp0(tL):"—"}</div>
+        <div class="portfolio-sub">${bookPL!==null?`${bookPL>=0?"+":"−"}${gbp0(Math.abs(bookPL))} vs book (${sgn(bookPct)}${bookPct.toFixed(1)}%)`:"live prices needed"}</div>
+        ${tDay!==null?`<div class="portfolio-sub" style="color:${tDay>=0?"#16803c":"#b91c1c"};margin-top:2px">${sgn(tDay)}${gbp(Math.abs(tDay))} today (${sgn(tDayPct)}${tDayPct.toFixed(2)}%)</div>`:""}
+      </div>
+      <div class="portfolio-col">
+        <div class="label">Pending Capital</div>
+        <div class="portfolio-val">${gbp0(tP)}</div>
+        <div class="portfolio-sub">${POSITIONS.reduce((s,p)=>s+p.orders.length,0)} GTC trap orders</div>
+      </div>
+      <div class="portfolio-col">
+        <div class="label">Dry Powder</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+          <span style="font-family:monospace;font-size:17px;font-weight:700;color:#7a8fa8">£</span>
+          <input class="dp-input" type="number" min="0" step="100"
+            value="${dryPowder.toFixed(2)}"
+            onchange="onDryPowderChange(this.value)"
+            title="Edit dry powder (uninvested cash)">
+        </div>
+        <div class="portfolio-sub">uninvested cash · edit to update</div>
+      </div>
+      <div class="portfolio-total-col">
+        <div class="label">Total Portfolio</div>
+        <div class="portfolio-total-val">${portfolioTotal!==null?gbp0(portfolioTotal):"—"}</div>
+        <div class="portfolio-sub">${portfolioTotal!==null?"market + pending + cash":"live prices needed"}</div>
+      </div>
+    </div>
+    <div class="baseline-row">
+      <span class="baseline-label">vs Baseline (£${BASELINE.toLocaleString("en-GB",{minimumFractionDigits:2})} transferred in)</span>
+      ${baselineGain!==null
+        ?`<span class="baseline-val" style="color:${baselineGain>=0?"#16803c":"#b91c1c"}">${baselineGain>=0?"+":"−"}${gbp(Math.abs(baselineGain))}</span>
+          <span class="baseline-val" style="color:${baselineGain>=0?"#16803c":"#b91c1c"}">${sgn(baselinePct)}${baselinePct.toFixed(2)}%</span>`
+        :`<span style="font-size:10px;color:#a8b8cc">enter dry powder + fetch live prices to calculate</span>`
+      }
+    </div>`;
+}
+
+function renderPositions(){
+  document.getElementById("positions").innerHTML=POSITIONS.map(pos=>{
+    const lp=prices[pos.ticker]||0;
+    const pc=prevCloses[pos.ticker]||0;
+    const isF=fetched.has(pos.ticker);
+    const ref=lp>0?lp:pos.avgCost;
+    const mkt=lp>0?lp*pos.shares:null;
+    const plv=mkt!==null?mkt-pos.bookValue:null;
+    const plp=lp>0?pct(lp,pos.avgCost):null;
+    const pp=plv!==null&&plv>=0;
+
+    // Daily change
+    const dayAbs=lp>0&&pc>0?(lp-pc)*pos.shares:null;
+    const dayPct=lp>0&&pc>0?pct(lp,pc):null;
+    const dayPos=dayAbs!==null&&dayAbs>=0;
+
+    // Orders panel (always shown if orders exist)
+    const ordersHtml=pos.orders.length>0
+      ?`<div class="orders-panel"><div class="label" style="margin-bottom:6px">Pending Orders — % ${lp>0?"vs live":"vs avg cost"}</div>${pos.orders.map(o=>{
+          const d=pct(o.price,ref);
+          const pr=o.price<10?`£${o.price.toFixed(3)}`:`${o.price.toFixed(2)}p`;
+          return`<div class="order-row"><span class="order-label">${o.label}</span><span class="order-price">${pr}</span><span class="order-amt">${gbp0(o.amount)}</span><span class="order-pct" style="${dStyle(d)}">${sgn(d)}${d.toFixed(1)}%</span></div>`;
+        }).join("")}</div>`
+      :"";
+
+    return`<div class="pos-card" style="border-left:4px solid ${pos.sealed?"#fecaca":"#1a2e4a"}">
+      <div class="pos-main">
+        <div class="pos-identity">
+          <div><span class="pos-ticker">${pos.ticker}</span>${pos.sealed?'<span class="badge badge-sealed">SEALED</span>':""}${isF&&lp>0?'<span class="badge badge-live">LIVE</span>':""}</div>
+          <div class="pos-name">${pos.name}</div>
+          <div class="pos-role">${pos.role}</div>
+        </div>
+        <div class="pos-fields">
+          <div class="field">
+            <div class="label">Shares</div>
+            <div class="field-val">${pos.shares}</div>
+          </div>
+          <div class="field">
+            <div class="label">Avg Cost</div>
+            <div class="field-val">£${fmt(pos.avgCost)}</div>
+          </div>
+          <div class="field">
+            <div class="label">Book</div>
+            <div class="field-val">${gbp0(pos.bookValue)}</div>
+          </div>
+          <div class="field" style="min-width:66px">
+            <div class="label">Live £</div>
+            <input class="live-input ${isF&&lp>0?"fetched":""}" type="number" step="0.01" min="0" placeholder="—" value="${lp>0?lp:""}" onchange="onPriceChange('${pos.ticker}',this.value)">
+          </div>
+          ${mkt!==null?`<div class="field" style="min-width:56px">
+            <div class="label">Mkt Val</div>
+            <div class="field-val">${gbp0(mkt)}</div>
+          </div>`:""}
+          ${plv!==null?`<div class="field" style="min-width:64px">
+            <div class="label">P&amp;L</div>
+            <div class="field-val ${pp?"pl-pos":"pl-neg"}">${pp?"+":"−"}${gbp0(Math.abs(plv))}</div>
+            <div style="font-family:monospace;font-size:10px;color:${pp?"#16803c":"#b91c1c"}">${sgn(plp)}${plp.toFixed(1)}%</div>
+          </div>`:""}
+          ${dayAbs!==null?`<div class="field" style="min-width:64px">
+            <div class="label">Today</div>
+            <div class="${dayPos?"day-pos":"day-neg"}">${dayPos?"+":"−"}${gbp(Math.abs(dayAbs))}</div>
+            <div style="font-family:monospace;font-size:10px;color:${dayPos?"#16803c":"#b91c1c"}">${sgn(dayPct)}${dayPct.toFixed(2)}%</div>
+          </div>`:""}
+        </div>
+      </div>
+      ${ordersHtml}
+    </div>`;
+  }).join("")
+}
+
 function renderLadder(){document.getElementById("ladder").innerHTML=`<div class="label">SWDA Shadow Ladder · ATH £99.78 · Oct 31, 2026 deadline non-negotiable</div><div class="ladder-tiers">${LADDER.map(t=>`<div class="ladder-tier"><strong style="color:#1a2e4a">${t.t}</strong> ${t.p}% → £${t.v}</div>`).join("")}</div>`}
+
 loadState();render();
 </script>
 </body>

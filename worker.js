@@ -20,7 +20,8 @@ export default {
     const url = new URL(request.url);
     const debug = url.searchParams.get("debug") === "1";
 
-    // Fetch a single Yahoo Finance quote — returns { value, currency, status }
+    // Fetch a single Yahoo Finance quote
+    // Returns { value, prevClose, currency, status }
     const qFull = async (symbol) => {
       try {
         const r = await fetch(
@@ -34,18 +35,19 @@ export default {
         );
         const data = await r.json();
         const meta = data?.chart?.result?.[0]?.meta;
-        if (!meta) return { value: null, currency: null, status: r.status, raw: data?.chart?.error };
-        const value  = meta.regularMarketPrice ?? null;
+        if (!meta) return { value: null, prevClose: null, currency: null, status: r.status, raw: data?.chart?.error };
+        const value    = meta.regularMarketPrice ?? null;
+        const prevClose = meta.chartPreviousClose ?? meta.regularMarketPreviousClose ?? null;
         const currency = meta.currency ?? null;
-        return { value, currency, status: r.status };
+        return { value, prevClose, currency, status: r.status };
       } catch (e) {
-        return { value: null, currency: null, status: "FETCH_ERROR", raw: e.message };
+        return { value: null, prevClose: null, currency: null, status: "FETCH_ERROR", raw: e.message };
       }
     };
 
     // GBp (pence) → GBP conversion; everything else returned as-is
-    const toGBP = ({ value, currency }) =>
-      value !== null && currency === "GBp" ? value / 100 : value;
+    const toGBP = (raw, currency) =>
+      raw !== null && currency === "GBp" ? raw / 100 : raw;
 
     // LSE ETFs — Yahoo Finance uses .L suffix
     const etfs = {
@@ -64,7 +66,6 @@ export default {
     const symbols = Object.values(etfs);
 
     if (debug) {
-      // Debug mode: test key symbols and show raw currency/value
       const [sgln, dfng, vix, swda, brent] = await Promise.all([
         qFull("SGLN.L"),
         qFull("DFNG.L"),
@@ -73,11 +74,11 @@ export default {
         qFull("BZ=F"),
       ]);
       return new Response(JSON.stringify({
-        "SGLN.L":  sgln,
-        "DFNG.L":  dfng,
-        "^VIX":    vix,
-        "SWDA.L":  swda,
-        "BZ=F":    brent,
+        "SGLN.L": sgln,
+        "DFNG.L": dfng,
+        "^VIX":   vix,
+        "SWDA.L": swda,
+        "BZ=F":   brent,
       }, null, 2), {
         headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       });
@@ -88,21 +89,32 @@ export default {
       Promise.all(symbols.map(s => qFull(s))),
       qFull("SWDA.L"),
       qFull("^VIX"),
-      qFull("BZ=F"),   // Brent Crude futures
+      qFull("BZ=F"),
     ]);
 
-    const prices = {};
+    const prices    = {};
+    const prevClose = {};
+
     tickers.forEach((ticker, i) => {
-      const v = toGBP(etfResults[i]);
-      if (v !== null) prices[ticker] = v;
+      const { value, prevClose: pc, currency } = etfResults[i];
+      const v  = toGBP(value, currency);
+      const pv = toGBP(pc,    currency);
+      if (v  !== null) prices[ticker]    = v;
+      if (pv !== null) prevClose[ticker] = pv;
     });
+
+    // SWDA prevClose (for macro display)
+    const swdaPrevClose = toGBP(swdaResult.prevClose, swdaResult.currency);
 
     return new Response(JSON.stringify({
       prices,
+      prevClose,
       macro: {
-        swda:  toGBP(swdaResult),
-        vix:   vixResult.value,    // VIX index — already in points, no conversion
-        brent: brentResult.value,  // USD per barrel
+        swda:          toGBP(swdaResult.value, swdaResult.currency),
+        swdaPrevClose: swdaPrevClose,
+        vix:           vixResult.value,
+        vixPrevClose:  vixResult.prevClose,
+        brent:         brentResult.value,
       },
       ts:  Date.now(),
       src: "Yahoo Finance",
