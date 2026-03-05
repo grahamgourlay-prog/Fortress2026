@@ -1,7 +1,7 @@
 // Fortress 2026 — Cloudflare Worker
 // Uses Yahoo Finance (no API key required)
 // LSE ETFs: .L suffix, prices returned in GBp (pence) → divide by 100 for GBP
-// Replace the existing Worker code with this entire file.
+// ATH is managed client-side (localStorage) — Yahoo Finance data unreliable for SWDA.L
 
 export default {
   async fetch(request, env) {
