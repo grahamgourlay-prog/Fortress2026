@@ -80,9 +80,11 @@ export default {
         const value     = meta.regularMarketPrice ?? null;
         const prevClose = meta.chartPreviousClose ?? meta.regularMarketPreviousClose ?? null;
         const closes = result?.indicators?.quote?.[0]?.close?.filter(c => c !== null && c > 0) ?? [];
-        const histMax = closes.length > 0 ? Math.max(...closes) : null;
-        const athRaw  = histMax !== null && value !== null ? Math.max(histMax, value)
-                      : histMax ?? value;
+        const histMax        = closes.length > 0 ? Math.max(...closes) : null;
+        const fiftyTwoWkHigh = meta.fiftyTwoWeekHigh ?? null; // intraday high — matches broker "1Y High"
+        // ATH = max of: historical monthly closes, 52-week intraday high, today's price
+        const candidates = [histMax, fiftyTwoWkHigh, value].filter(v => v !== null && v > 0);
+        const athRaw = candidates.length > 0 ? Math.max(...candidates) : null;
         return { value, prevClose, ath: athRaw, currency, status: r.status };
       } catch (e) {
         return { value: null, prevClose: null, ath: null, currency: null, status: "FETCH_ERROR", raw: e.message };
