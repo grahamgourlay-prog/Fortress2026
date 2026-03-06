@@ -8,83 +8,83 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; color: #1e2d40; font-size: 13px; padding: 14px 10px 60px; }
-.label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a8fa8; }
+body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; color: #1e2d40; font-size: 14px; padding: 14px 10px 60px; }
+.label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a8fa8; }
 .header { border-bottom: 2px solid #1a2e4a; padding-bottom: 12px; margin-bottom: 14px; }
-.header-sub { font-size: 9px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #7a8fa8; }
+.header-sub { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #7a8fa8; }
 .header-title { font-size: 20px; font-weight: 700; color: #1a2e4a; margin-top: 3px; }
-.header-date { font-size: 9px; color: #a8b8cc; margin-top: 3px; }
+.header-date { font-size: 10px; color: #a8b8cc; margin-top: 3px; }
 .scenarios { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-.scenario { flex: 1 1 150px; background: #fff; border: 1px solid #dde3ec; padding: 9px 12px; }
-.scenario-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
+.scenario { flex: 1 1 150px; background: #fff; border: 1px solid #dde3ec; padding: 11px 14px; }
+.scenario-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
 .scenario-prob { font-family: monospace; font-size: 22px; font-weight: 700; }
-.scenario-desc { font-size: 10px; color: #4a5e78; margin-top: 2px; line-height: 1.4; }
+.scenario-desc { font-size: 11px; color: #4a5e78; margin-top: 3px; line-height: 1.5; }
 .macro { background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #d97706; padding: 10px 14px; margin-bottom: 12px; }
 .macro-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
 .macro-chips { display: flex; gap: 8px 28px; flex-wrap: wrap; }
-.macro-chip-val { font-family: monospace; font-size: 13px; font-weight: 700; color: #1a2e4a; }
-.macro-chip-chg { font-family: monospace; font-size: 10px; font-weight: 600; }
-.macro-chip-note { font-size: 9px; font-weight: 600; margin-top: 1px; }
+.macro-chip-val { font-family: monospace; font-size: 14px; font-weight: 700; color: #1a2e4a; }
+.macro-chip-chg { font-family: monospace; font-size: 11px; font-weight: 600; }
+.macro-chip-note { font-size: 10px; font-weight: 600; margin-top: 2px; }
 
 /* ── Portfolio section ──────────────────────────────────────── */
 .portfolio-section { background: #fff; border: 1px solid #dde3ec; border-top: 3px solid #1a2e4a; padding: 12px 14px; margin-bottom: 12px; }
-.portfolio-section-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a8fa8; margin-bottom: 10px; }
+.portfolio-section-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #7a8fa8; margin-bottom: 10px; }
 .portfolio-grid { display: flex; gap: 8px 0; flex-wrap: wrap; }
 .portfolio-col { flex: 1 1 120px; padding: 0 12px; border-right: 1px solid #eef1f6; }
 .portfolio-col:first-child { padding-left: 0; }
 .portfolio-col:last-child { border-right: none; }
 .portfolio-val { font-family: monospace; font-size: 17px; font-weight: 700; color: #1a2e4a; margin-top: 3px; }
-.portfolio-sub { font-size: 10px; color: #7a8fa8; margin-top: 2px; }
+.portfolio-sub { font-size: 11px; color: #7a8fa8; margin-top: 2px; }
 .portfolio-total-col { flex: 1 1 160px; padding: 0 12px; border-left: 2px solid #1a2e4a; }
 .portfolio-total-val { font-family: monospace; font-size: 20px; font-weight: 700; color: #1a2e4a; margin-top: 3px; }
 .baseline-row { margin-top: 10px; padding-top: 8px; border-top: 1px solid #eef1f6; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-.baseline-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #7a8fa8; }
-.baseline-val { font-family: monospace; font-size: 12px; font-weight: 700; }
+.baseline-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #7a8fa8; }
+.baseline-val { font-family: monospace; font-size: 13px; font-weight: 700; }
 .dp-input { width: 90px; text-align: right; font-family: monospace; font-size: 15px; font-weight: 700; color: #1a2e4a; padding: 2px 5px; border-radius: 3px; border: 1px solid #c8d2e0; background: #f1f4f8; outline: none; }
 .dp-input:focus { border-color: #93c5fd; background: #eff6ff; }
 
 /* ── Fetch bar ──────────────────────────────────────────────── */
 .fetch-bar { background: #fff; border: 1px solid #dde3ec; padding: 10px 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.btn-fetch { background: #1a2e4a; color: #fff; border: none; border-radius: 4px; padding: 9px 18px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.btn-fetch { background: #1a2e4a; color: #fff; border: none; border-radius: 4px; padding: 9px 18px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 .btn-fetch:disabled { background: #9ca3af; cursor: default; }
-.fetch-status { font-family: monospace; font-size: 10px; }
-.fetch-hint { font-size: 9px; color: #a8b8cc; margin-top: 2px; }
+.fetch-status { font-family: monospace; font-size: 11px; }
+.fetch-hint { font-size: 10px; color: #a8b8cc; margin-top: 2px; }
 
 /* ── Position cards ─────────────────────────────────────────── */
 .pos-card { background: #fff; border: 1px solid #dde3ec; margin-bottom: 7px; }
-.pos-main { padding: 10px 12px; display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+.pos-main { padding: 12px 14px; display: flex; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
 .pos-identity { flex: 1 1 140px; min-width: 120px; }
 .pos-ticker { font-family: monospace; font-weight: 700; font-size: 14px; color: #1a2e4a; }
-.pos-name { font-size: 10px; color: #4a5e78; margin-top: 1px; }
-.pos-role { font-size: 9px; color: #a8b8cc; margin-top: 1px; }
-.badge { font-size: 8px; font-weight: 700; padding: 1px 4px; border-radius: 2px; margin-left: 4px; }
+.pos-name { font-size: 11px; color: #4a5e78; margin-top: 2px; }
+.pos-role { font-size: 10px; color: #8a9eb8; margin-top: 2px; line-height: 1.4; }
+.badge { font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 2px; margin-left: 4px; }
 .badge-sealed { color: #b91c1c; background: #fef2f2; border: 1px solid #fecaca; }
 .badge-live { color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; }
 .pos-fields { display: flex; gap: 10px 14px; flex-wrap: wrap; align-items: flex-start; }
 .field { text-align: right; min-width: 52px; }
-.field-val { font-family: monospace; font-size: 12px; font-weight: 600; color: #1a2e4a; }
-.live-input { width: 66px; text-align: right; font-family: monospace; font-size: 12px; padding: 2px 5px; border-radius: 3px; border: 1px solid #c8d2e0; background: #f1f4f8; color: #1a2e4a; outline: none; }
+.field-val { font-family: monospace; font-size: 13px; font-weight: 600; color: #1a2e4a; }
+.live-input { width: 66px; text-align: right; font-family: monospace; font-size: 13px; padding: 2px 5px; border-radius: 3px; border: 1px solid #c8d2e0; background: #f1f4f8; color: #1a2e4a; outline: none; }
 .live-input:focus { border-color: #93c5fd; background: #eff6ff; }
 .live-input.fetched { border-color: #93c5fd; background: #eff6ff; }
 .pl-pos { color: #16803c; } .pl-neg { color: #b91c1c; }
-.day-pos { color: #16803c; font-family: monospace; font-size: 10px; }
-.day-neg { color: #b91c1c; font-family: monospace; font-size: 10px; }
+.day-pos { color: #16803c; font-family: monospace; font-size: 11px; }
+.day-neg { color: #b91c1c; font-family: monospace; font-size: 11px; }
 
 /* ── Orders panel ───────────────────────────────────────────── */
-.orders-panel { border-top: 1px solid #f1f4f8; background: #f8f9fb; padding: 10px 12px; }
-.order-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
-.order-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #7a8fa8; min-width: 110px; flex-shrink: 0; }
-.order-price { font-family: monospace; font-size: 11px; color: #1a2e4a; min-width: 52px; }
-.order-amt { font-family: monospace; font-size: 11px; color: #4a5e78; min-width: 46px; }
-.order-pct { font-family: monospace; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 3px; }
+.orders-panel { border-top: 1px solid #f1f4f8; background: #f8f9fb; padding: 10px 14px; }
+.order-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; flex-wrap: wrap; }
+.order-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #7a8fa8; min-width: 110px; flex-shrink: 0; }
+.order-price { font-family: monospace; font-size: 12px; color: #1a2e4a; min-width: 52px; }
+.order-amt { font-family: monospace; font-size: 12px; color: #4a5e78; min-width: 46px; }
+.order-pct { font-family: monospace; font-size: 12px; font-weight: 700; padding: 1px 6px; border-radius: 3px; }
 
 /* ── Totals / Ladder ────────────────────────────────────────── */
 .totals { background: #fff; border: 2px solid #1a2e4a; padding: 12px 14px; margin-top: 4px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
 .total-val { font-family: monospace; font-size: 16px; font-weight: 700; }
 .ladder { background: #fff; border: 1px solid #dde3ec; padding: 10px 14px; margin-top: 10px; }
 .ladder-tiers { display: flex; gap: 4px 16px; flex-wrap: wrap; margin-top: 6px; }
-.ladder-tier { font-family: monospace; font-size: 11px; color: #4a5e78; }
-.footer { margin-top: 8px; font-size: 9px; color: #c8d2e0; line-height: 1.6; }
+.ladder-tier { font-family: monospace; font-size: 12px; color: #4a5e78; }
+.footer { margin-top: 8px; font-size: 10px; color: #c8d2e0; line-height: 1.6; }
 .pos-drag-handle { cursor: grab; color: #c8d2e0; font-size: 18px; padding: 2px 8px 2px 2px; align-self: stretch; display: flex; align-items: center; user-select: none; flex-shrink: 0; }
 .pos-drag-handle:hover { color: #7a8fa8; }
 .pos-drag-handle:active { cursor: grabbing; }
@@ -112,7 +112,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 05 Mar 2026 22:45 · NAVY Mid Trap executed 92@£8.9965</div>
+<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 06 Mar 2026 · NAVY Mid Trap executed 92@£8.9965</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:38,avgCost:75.42,bookValue:2865.84,sealed:false,
@@ -179,7 +179,7 @@ async function fetchAll(){
     prices=np;
     prevCloses=res.prevClose||{};
     fetched=new Set(Object.keys(np));
-    macro={swda:res.macro?.swda||null,swdaPrevClose:res.macro?.swdaPrevClose||null,swdaATH:res.macro?.swdaATH||null,brent:res.macro?.brent||null,vix:res.macro?.vix||null,vixPrevClose:res.macro?.vixPrevClose||null,ts:res.ts||Date.now(),src:res.src||""};
+    macro={swda:res.macro?.swda||null,swdaPrevClose:res.macro?.swdaPrevClose||null,brent:res.macro?.brent||null,vix:res.macro?.vix||null,vixPrevClose:res.macro?.vixPrevClose||null,ts:res.ts||Date.now(),src:res.src||""};
     saveState();
     const t=new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
     setStatus(`✓ ${Object.keys(np).length}/${POSITIONS.length} prices found — ${t}`,"ok");
@@ -216,10 +216,10 @@ function renderMacro(){
      day:vixDayChg!=null?`${sgn(vixDayChg)}${vixDayChg.toFixed(2)} today`:null,
      note:macro.vix>25?"Scenario C eliminated":macro.vix>15?"Elevated":null,nc:macro.vix>25?"#b91c1c":"#92400e"},
   ];
-  const athHtml=`<span style="display:inline-flex;align-items:center;gap:4px;margin-left:auto"><span style="font-size:9px;font-weight:700;color:#92400e;letter-spacing:1px;text-transform:uppercase">SWDA ATH</span><span style="font-size:9px;color:#92400e;font-family:monospace">£</span><input type="number" step="0.01" min="1" value="${ath.toFixed(2)}" onchange="onATHChange(this.value)" title="Edit SWDA ATH (GBP) — update when SWDA makes a new high" style="width:58px;text-align:right;font-family:monospace;font-size:12px;font-weight:700;color:#78350f;padding:1px 4px;border-radius:3px;border:1px solid #fde68a;background:#fffbeb;outline:none"></span>`;
+  const athHtml=`<span style="display:inline-flex;align-items:center;gap:4px;margin-left:auto"><span style="font-size:10px;font-weight:700;color:#92400e;letter-spacing:1px;text-transform:uppercase">SWDA ATH</span><span style="font-size:10px;color:#92400e;font-family:monospace">£</span><input type="number" step="0.01" min="1" value="${ath.toFixed(2)}" onchange="onATHChange(this.value)" title="Edit SWDA ATH (GBP) — update when SWDA makes a new high" style="width:58px;text-align:right;font-family:monospace;font-size:13px;font-weight:700;color:#78350f;padding:1px 4px;border-radius:3px;border:1px solid #fde68a;background:#fffbeb;outline:none"></span>`;
   document.getElementById("macro-bar").innerHTML=
-    `<div class="macro-header"><span class="label" style="color:#92400e">Macro Watch</span>${ts?`<span style="font-size:9px;color:#a8b8cc;font-family:monospace">updated ${ts}</span>`:""}${macro.src?`<span style="font-size:9px;color:#a8b8cc">· ${macro.src}</span>`:""}${!ts?`<span style="font-size:9px;color:#a8b8cc">— press Fetch to load</span>`:""}${athHtml}<button onclick="fetchAll()" style="background:#1a2e4a;color:#fff;border:none;border-radius:3px;padding:3px 12px;font-size:10px;font-weight:600;cursor:pointer">⟳ Refresh</button></div>
-    <div class="macro-chips">${chips.map(({k,val,extra,day,note,nc})=>`<div><div style="display:flex;align-items:baseline;gap:5px"><span style="font-size:10px;font-weight:700;color:#78350f;min-width:36px">${k}</span><span class="macro-chip-val">${val}</span>${extra?`<span class="macro-chip-chg" style="color:#4a5e78">${extra}</span>`:""}</div>${day?`<div style="font-size:9px;color:#7a8fa8;font-family:monospace">${day}</div>`:""} ${note?`<div class="macro-chip-note" style="color:${nc}">${note}</div>`:""}</div>`).join("")}</div>`;
+    `<div class="macro-header"><span class="label" style="color:#92400e">Macro Watch</span>${ts?`<span style="font-size:10px;color:#a8b8cc;font-family:monospace">updated ${ts}</span>`:""}${macro.src?`<span style="font-size:10px;color:#a8b8cc">· ${macro.src}</span>`:""}${!ts?`<span style="font-size:10px;color:#a8b8cc">— press Fetch to load</span>`:""}${athHtml}<button onclick="fetchAll()" style="background:#1a2e4a;color:#fff;border:none;border-radius:3px;padding:3px 12px;font-size:11px;font-weight:600;cursor:pointer">⟳ Refresh</button></div>
+    <div class="macro-chips">${chips.map(({k,val,extra,day,note,nc})=>`<div><div style="display:flex;align-items:baseline;gap:5px"><span style="font-size:11px;font-weight:700;color:#78350f;min-width:36px">${k}</span><span class="macro-chip-val">${val}</span>${extra?`<span class="macro-chip-chg" style="color:#4a5e78">${extra}</span>`:""}</div>${day?`<div style="font-size:10px;color:#7a8fa8;font-family:monospace">${day}</div>`:""} ${note?`<div class="macro-chip-note" style="color:${nc}">${note}</div>`:""}</div>`).join("")}</div>`;
 }
 
 function renderPortfolio(){
@@ -287,7 +287,7 @@ function renderPortfolio(){
       ${baselineGain!==null
         ?`<span class="baseline-val" style="color:${baselineGain>=0?"#16803c":"#b91c1c"}">${baselineGain>=0?"+":"−"}${gbp(Math.abs(baselineGain))}</span>
           <span class="baseline-val" style="color:${baselineGain>=0?"#16803c":"#b91c1c"}">${sgn(baselinePct)}${baselinePct.toFixed(2)}%</span>`
-        :`<span style="font-size:10px;color:#a8b8cc">enter dry powder + fetch live prices to calculate</span>`
+        :`<span style="font-size:11px;color:#a8b8cc">enter dry powder + fetch live prices to calculate</span>`
       }
     </div>`;
 }
@@ -350,12 +350,12 @@ function renderPositions(){
           ${plv!==null?`<div class="field" style="min-width:64px">
             <div class="label">P&amp;L</div>
             <div class="field-val ${pp?"pl-pos":"pl-neg"}">${pp?"+":"−"}${gbp0(Math.abs(plv))}</div>
-            <div style="font-family:monospace;font-size:10px;color:${pp?"#16803c":"#b91c1c"}">${sgn(plp)}${plp.toFixed(1)}%</div>
+            <div style="font-family:monospace;font-size:11px;color:${pp?"#16803c":"#b91c1c"}">${sgn(plp)}${plp.toFixed(1)}%</div>
           </div>`:""}
           ${dayAbs!==null?`<div class="field" style="min-width:64px">
             <div class="label">Today</div>
             <div class="${dayPos?"day-pos":"day-neg"}">${dayPos?"+":"−"}${gbp(Math.abs(dayAbs))}</div>
-            <div style="font-family:monospace;font-size:10px;color:${dayPos?"#16803c":"#b91c1c"}">${sgn(dayPct)}${dayPct.toFixed(2)}%</div>
+            <div style="font-family:monospace;font-size:11px;color:${dayPos?"#16803c":"#b91c1c"}">${sgn(dayPct)}${dayPct.toFixed(2)}%</div>
           </div>`:""}
         </div>
       </div>
@@ -377,12 +377,11 @@ function renderPositions(){
 }
 
 function renderLadder(){
-  const ath=macro.swdaATH||FALLBACK_ATH;
-  const athLabel=`£${ath.toFixed(2)}${macro.swdaATH?"":" *"}`;
+  const ath=manualATH;
+  const athLabel=`£${ath.toFixed(2)}`;
   document.getElementById("ladder").innerHTML=
     `<div class="label">SWDA Shadow Ladder · ATH ${athLabel} · Oct 31, 2026 deadline non-negotiable</div>`+
-    `<div class="ladder-tiers">${LADDER.map(t=>{const v=(ath*(1+t.p/100)).toFixed(2);return`<div class="ladder-tier"><strong style="color:#1a2e4a">${t.t}</strong> ${t.p}% → £${v}</div>`;}).join("")}</div>`+
-    `${!macro.swdaATH?`<div style="font-size:9px;color:#a8b8cc;margin-top:4px">* using last known ATH — fetch prices to update</div>`:""}`;
+    `<div class="ladder-tiers">${LADDER.map(t=>{const v=(ath*(1+t.p/100)).toFixed(2);return`<div class="ladder-tier"><strong style="color:#1a2e4a">${t.t}</strong> ${t.p}% → £${v}</div>`;}).join("")}</div>`;
 }
 
 loadState();render();
