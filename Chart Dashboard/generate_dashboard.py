@@ -95,22 +95,19 @@ def build_interval_data(df, ind_cfg):
     }
 
     c = df["close"]
-    if ind_cfg.get("sma20"):
-        result["ind"]["sma20"] = sma(c, 20)
-    if ind_cfg.get("sma50"):
-        result["ind"]["sma50"] = sma(c, 50)
-    if ind_cfg.get("bollinger"):
-        bl, bm, bu = bollinger(c)
-        result["ind"]["bb_lower"] = bl
-        result["ind"]["bb_mid"]   = bm
-        result["ind"]["bb_upper"] = bu
-    if ind_cfg.get("rsi"):
-        result["ind"]["rsi"] = rsi(c)
-    if ind_cfg.get("macd"):
-        ml, sl, hist = macd_calc(c)
-        result["ind"]["macd_line"]   = ml
-        result["ind"]["macd_signal"] = sl
-        result["ind"]["macd_hist"]   = hist
+    # Always compute ALL indicators regardless of config so JS toggles work at runtime.
+    # The config's indicators section only controls which checkboxes default to checked.
+    result["ind"]["sma20"] = sma(c, 20)
+    result["ind"]["sma50"] = sma(c, 50)
+    bl, bm, bu = bollinger(c)
+    result["ind"]["bb_lower"] = bl
+    result["ind"]["bb_mid"]   = bm
+    result["ind"]["bb_upper"] = bu
+    result["ind"]["rsi"] = rsi(c)
+    ml, sl, hist = macd_calc(c)
+    result["ind"]["macd_line"]   = ml
+    result["ind"]["macd_signal"] = sl
+    result["ind"]["macd_hist"]   = hist
 
     return result
 
@@ -260,6 +257,7 @@ const C = {
 
 const PLOTLY_CFG = {
   responsive:true, displayModeBar:true, displaylogo:false,
+  scrollZoom:true,
   modeBarButtonsToRemove:["lasso2d","select2d","toImage"],
   modeBarButtonsToAdd:[{
     name:"Download PNG", icon:Plotly.Icons.camera,
@@ -343,17 +341,40 @@ function buildChart(containerId, td, iv, opts, compact) {
   const dates = ivData.dates;
   const o     = ivData;
 
-  // Sub-chart rows
-  const subRows   = [];
-  if (!compact && ind.vol && o.volume?.length)  subRows.push("vol");
-  if (!compact && ind.rsi && ivData.ind?.rsi)   subRows.push("rsi");
+  // Sub-chart rows (order determines top-to-bottom visual order below price panel)
+  const subRows = [];
+  if (!compact && ind.vol && o.volume?.length)       subRows.push("vol");
+  if (!compact && ind.rsi && ivData.ind?.rsi)        subRows.push("rsi");
   if (!compact && ind.macd && ivData.ind?.macd_line) subRows.push("macd");
 
-  const rowCount = 1 + subRows.length;
-  const mainH    = compact ? 1 : 0.55;
-  const subH     = rowCount > 1 ? (1 - mainH) / subRows.length : 0;
-  const normH    = [mainH, ...subRows.map(() => subH)];
+  // ── Domain layout ────────────────────────────────────────────────────────────
+  // Plotly domains: 0 = bottom of paper, 1 = top of paper.
+  // Layout order (bottom→top): last sub, …, first sub, main price panel.
+  const nSubs    = subRows.length;
+  const panelGap = 0.04;                          // gap between panels
+  const gapTotal = nSubs * panelGap;
+  const avail    = 1 - gapTotal;
+  // Give price panel more space when fewer sub-panels
+  const mainFrac = compact ? 1 : (nSubs === 0 ? 1 : nSubs === 1 ? 0.65 : 0.58);
+  const subFrac  = nSubs > 0 ? (1 - mainFrac) / nSubs : 0;
+  const mainH    = avail * mainFrac;
+  const subH     = avail * subFrac;
 
+  const domOf = {};
+  let cur = 0;
+  // Place sub-panels from bottom up (last in subRows = bottom-most)
+  for (let i = subRows.length - 1; i >= 0; i--) {
+    domOf[subRows[i]] = [parseFloat(cur.toFixed(4)), parseFloat((cur + subH).toFixed(4))];
+    cur += subH + panelGap;
+  }
+  domOf.main = [parseFloat(cur.toFixed(4)), 1.0];
+
+  // x-axis must anchor to the BOTTOM-MOST y-axis so date labels appear at the
+  // very bottom of the chart (below all sub-panels).
+  const xAnchorIdx = nSubs > 0 ? nSubs + 1 : 1;
+  const xAnchor    = xAnchorIdx === 1 ? "y" : xAnchorIdx === 2 ? "y2" : `y${xAnchorIdx}`;
+
+  // ── Traces ───────────────────────────────────────────────────────────────────
   const traces = [];
 
   // Candlestick
@@ -362,8 +383,7 @@ function buildChart(containerId, td, iv, opts, compact) {
     x:dates, open:o.open, high:o.high, low:o.low, close:o.close,
     increasing:{ line:{color:C.gn}, fillcolor:C.gn },
     decreasing:{ line:{color:C.rd}, fillcolor:C.rd },
-    xaxis:"x", yaxis:"y", showlegend:false,
-    hoverinfo:"x+y",
+    xaxis:"x", yaxis:"y", showlegend:false, hoverinfo:"x+y",
   });
 
   // SMA 20
@@ -394,36 +414,40 @@ function buildChart(containerId, td, iv, opts, compact) {
       xaxis:"x", yaxis:"y", hoverinfo:"x+y" });
   }
 
-  // Sub-chart axes + traces
+  // Sub-chart y-axis definitions + traces
+  // NOTE: all traces share xaxis:"x" — the explicit yaxis domains separate panels visually.
   const subAxisDefs = {};
-  let subIdx = 2;
-  for (const sub of subRows) {
-    const yKey   = `yaxis${subIdx}`;
-    const yRef   = subIdx === 2 ? "y2" : `y${subIdx}`;
-    const xRef   = "x";
-    const isLast = subIdx === rowCount;
+  subRows.forEach((sub, idx) => {
+    const yIdx = idx + 2;
+    const yRef = yIdx === 2 ? "y2" : `y${yIdx}`;
+    const yKey = yIdx === 2 ? "yaxis2" : `yaxis${yIdx}`;
 
     subAxisDefs[yKey] = {
+      domain: domOf[sub],
+      anchor: "x",
       showgrid:true, gridcolor:C.bd, zeroline:false,
-      tickfont:{color:C.mu, size:9}, linecolor:C.bd, domain:undefined
+      tickfont:{color:C.mu, size:9}, linecolor:C.bd,
+      fixedrange: false,
     };
 
     if (sub === "vol") {
       const vc = dates.map((_,i) =>
         (o.close[i]??0) >= (o.open[i]??0) ? "rgba(63,185,80,0.55)" : "rgba(248,81,73,0.55)");
       traces.push({ type:"bar", name:"Volume", x:dates, y:o.volume,
-        marker:{color:vc}, xaxis:xRef, yaxis:yRef, showlegend:false, hoverinfo:"x+y" });
+        marker:{color:vc}, xaxis:"x", yaxis:yRef, showlegend:false, hoverinfo:"x+y" });
       subAxisDefs[yKey].title = {text:"Vol", font:{color:C.mu,size:9}};
     }
     if (sub === "rsi") {
       subAxisDefs[yKey].range = [0,100];
       traces.push({ type:"scatter", name:"RSI", x:dates, y:ivData.ind.rsi,
-        line:{color:C.yw, width:1.5}, xaxis:xRef, yaxis:yRef, hoverinfo:"x+y" });
+        line:{color:C.yw, width:1.5}, xaxis:"x", yaxis:yRef, hoverinfo:"x+y" });
       const xEdges = [dates[0], dates[dates.length-1]];
-      traces.push({ type:"scatter", x:xEdges, y:[70,70], line:{color:"rgba(248,81,73,0.35)",width:1,dash:"dash"},
-        xaxis:xRef, yaxis:yRef, showlegend:false, hoverinfo:"none" });
-      traces.push({ type:"scatter", x:xEdges, y:[30,30], line:{color:"rgba(63,185,80,0.35)",width:1,dash:"dash"},
-        xaxis:xRef, yaxis:yRef, showlegend:false, hoverinfo:"none" });
+      traces.push({ type:"scatter", x:xEdges, y:[70,70],
+        line:{color:"rgba(248,81,73,0.35)",width:1,dash:"dash"},
+        xaxis:"x", yaxis:yRef, showlegend:false, hoverinfo:"none" });
+      traces.push({ type:"scatter", x:xEdges, y:[30,30],
+        line:{color:"rgba(63,185,80,0.35)",width:1,dash:"dash"},
+        xaxis:"x", yaxis:yRef, showlegend:false, hoverinfo:"none" });
       subAxisDefs[yKey].title = {text:"RSI", font:{color:C.mu,size:9}};
     }
     if (sub === "macd") {
@@ -432,52 +456,47 @@ function buildChart(containerId, td, iv, opts, compact) {
       const hc = ivData.ind.macd_hist.map(v =>
         v===null?"transparent":v>=0?"rgba(63,185,80,0.6)":"rgba(248,81,73,0.6)");
       traces.push({ type:"bar", name:"MACD Hist", x:dates, y:ivData.ind.macd_hist,
-        marker:{color:hc}, xaxis:xRef, yaxis:yRef, showlegend:false, hoverinfo:"x+y" });
+        marker:{color:hc}, xaxis:"x", yaxis:yRef, showlegend:false, hoverinfo:"x+y" });
       traces.push({ type:"scatter", name:"MACD", x:dates, y:ivData.ind.macd_line,
-        line:{color:C.ac,width:1.5}, xaxis:xRef, yaxis:yRef, hoverinfo:"x+y" });
+        line:{color:C.ac,width:1.5}, xaxis:"x", yaxis:yRef, hoverinfo:"x+y" });
       traces.push({ type:"scatter", name:"Signal", x:dates, y:ivData.ind.macd_signal,
-        line:{color:C.or,width:1.5}, xaxis:xRef, yaxis:yRef, hoverinfo:"x+y" });
+        line:{color:C.or,width:1.5}, xaxis:"x", yaxis:yRef, hoverinfo:"x+y" });
       subAxisDefs[yKey].title = {text:"MACD", font:{color:C.mu,size:9}};
     }
-    subIdx++;
-  }
+  });
 
-  // Linked x-axes for sub-charts
-  const linkedX = {};
-  for (let r = 2; r <= rowCount; r++) {
-    const k = r===2 ? "xaxis2" : `xaxis${r}`;
-    linkedX[k] = {
-      showgrid:true, gridcolor:C.bd, tickfont:{color:C.mu,size:9},
-      linecolor:C.bd, matches:"x",
-      showticklabels: r === rowCount && rowCount > 1,
-      rangeslider:{visible:false},
-    };
-  }
-
+  // ── Layout ───────────────────────────────────────────────────────────────────
   const layout = {
     paper_bgcolor:C.sf, plot_bgcolor:C.bg,
     font:{color:C.tx, family:"-apple-system,sans-serif", size:10},
-    grid:{rows:rowCount, columns:1, pattern:"independent",
-          roworder:"top to bottom", ygap:0.03, rowheights:normH},
-    height: compact ? 260 : Math.max(420, 340 + subRows.length * 120),
+    height: compact ? 260 : Math.max(420, 340 + nSubs * 120),
     margin:{ l:55, r:20, t:compact?15:20, b:compact?30:40 },
     hovermode:"x unified",
     hoverlabel:{bgcolor:"#21262d", bordercolor:C.bd, font:{color:C.tx}},
     legend:{bgcolor:"rgba(0,0,0,0)", bordercolor:C.bd, borderwidth:1,
             font:{color:C.mu, size:9}, x:0, y:1.02, orientation:"h"},
     xaxis:{
+      domain:[0,1],
+      anchor: xAnchor,        // anchored to bottom-most panel → date labels at bottom
       showgrid:true, gridcolor:C.bd, zeroline:false,
       tickfont:{color:C.mu,size:9}, linecolor:C.bd,
       rangeslider:{visible:false},
       rangeselector: compact ? {visible:false} : rangeSelector(iv),
+      showspikes:true, spikemode:"across", spikesnap:"cursor",
+      spikethickness:1, spikecolor:C.mu, spikedash:"dot",
     },
     yaxis:{
+      domain: domOf.main,
+      anchor:"x",
       showgrid:true, gridcolor:C.bd, zeroline:false,
       tickfont:{color:C.mu,size:9}, linecolor:C.bd,
       type: logScale ? "log" : "linear",
       fixedrange: false,
+      autorange: true,
+      rangemode: "normal",    // never force y=0 into range
+      showspikes:true, spikemode:"across", spikesnap:"cursor",
+      spikethickness:1, spikecolor:C.mu, spikedash:"dot",
     },
-    ...linkedX,
     ...subAxisDefs,
   };
 
