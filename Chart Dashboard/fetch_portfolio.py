@@ -51,6 +51,50 @@ def load_config():
         return json.load(f)
 
 
+def fix_scale_discontinuity(df, symbol, interval_id):
+    """
+    Detect and fix 100× scale inconsistencies in Yahoo Finance data.
+
+    Yahoo Finance occasionally returns some bars for an LSE ticker in GBP
+    (pounds) while the rest are in GBp (pence).  After the /100 normalisation
+    the affected rows end up ~100× too small (or too large).
+
+    Strategy: compare every bar to the GLOBAL median of the whole series.
+    Because typically <20% of bars are corrupted, the global median is
+    dominated by the correct values and gives a reliable reference even when
+    the bad data spans a consecutive multi-week block (where a rolling window
+    would itself get corrupted).
+
+    Any bar whose close is more than 10× away from the global median is
+    assumed to be a unit error and is multiplied or divided by 100.
+    """
+    if len(df) < 5:
+        return df
+
+    ref = df["Close"].median()      # robust even with <50 % corrupt bars
+    if ref == 0:
+        return df
+
+    too_low  = df["Close"] < (ref / 10)   # > 10× below global median
+    too_high = df["Close"] > (ref * 10)   # > 10× above global median
+
+    if too_low.any():
+        n = int(too_low.sum())
+        print(f"\n    ⚠  {symbol}/{interval_id}: {n} bar(s) are >10× below series median "
+              f"— multiplying OHLC by 100 to fix unit mismatch")
+        for col in ["Open", "High", "Low", "Close"]:
+            df.loc[too_low, col] = df.loc[too_low, col] * 100.0
+
+    if too_high.any():
+        n = int(too_high.sum())
+        print(f"\n    ⚠  {symbol}/{interval_id}: {n} bar(s) are >10× above series median "
+              f"— dividing OHLC by 100 to fix unit mismatch")
+        for col in ["Open", "High", "Low", "Close"]:
+            df.loc[too_high, col] = df.loc[too_high, col] / 100.0
+
+    return df
+
+
 def fetch_ohlcv(symbol, yf_symbol, interval_id):
     """
     Fetch OHLCV data from Yahoo Finance via yfinance.
@@ -84,6 +128,10 @@ def fetch_ohlcv(symbol, yf_symbol, interval_id):
             for col in ["Open", "High", "Low", "Close"]:
                 if col in df.columns:
                     df[col] = df[col] / 100.0
+
+        # Fix any 100× scale discontinuities (Yahoo Finance data quality issue
+        # where some bars are returned in different units than the rest).
+        df = fix_scale_discontinuity(df, symbol, interval_id)
 
         # Standardise columns to lowercase
         df = df.reset_index()
