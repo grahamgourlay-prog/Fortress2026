@@ -92,6 +92,10 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 .sortable-drag { box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { display: inline-block; width: 11px; height: 11px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; animation: spin 0.7s linear infinite; }
+.chart-link { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 2px; margin-left: 4px; color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; text-decoration: none; vertical-align: middle; }
+.chart-link:hover { background: #dbeafe; }
+.header-charts-link { display: inline-block; margin-top: 5px; font-size: 11px; font-weight: 600; color: #1a2e4a; text-decoration: none; padding: 3px 10px; border: 1px solid #1a2e4a; border-radius: 3px; letter-spacing: 0.5px; }
+.header-charts-link:hover { background: #1a2e4a; color: #fff; }
 </style>
 </head>
 <body>
@@ -99,6 +103,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
   <div class="header-sub">Fortress 2026 · Interactive Investor SIPP</div>
   <div class="header-title">Satellite Portfolio Dashboard</div>
   <div class="header-date" id="hdate"></div>
+  <a href="https://grahamgourlay-prog.github.io/Fortress2026/portfolio_dashboard.html" class="header-charts-link">Charts →</a>
 </div>
 <div class="scenarios" id="scenarios"></div>
 <div class="macro" id="macro-bar"></div>
@@ -322,7 +327,7 @@ function renderPositions(){
       <div class="pos-main">
         <div class="pos-drag-handle" title="Drag to reorder">⠿</div>
         <div class="pos-identity">
-          <div><span class="pos-ticker">${pos.ticker}</span>${pos.sealed?'<span class="badge badge-sealed">SEALED</span>':""}${isF&&lp>0?'<span class="badge badge-live">LIVE</span>':""}</div>
+          <div><span class="pos-ticker">${pos.ticker}</span>${pos.sealed?'<span class="badge badge-sealed">SEALED</span>':""}${isF&&lp>0?'<span class="badge badge-live">LIVE</span>':""}<a href="https://grahamgourlay-prog.github.io/Fortress2026/portfolio_dashboard.html?ticker=${pos.ticker}" target="_blank" class="chart-link">📈 Chart</a></div>
           <div class="pos-name">${pos.name}</div>
           <div class="pos-role">${pos.role}</div>
         </div>

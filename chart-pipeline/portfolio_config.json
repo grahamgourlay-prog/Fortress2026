@@ -1,0 +1,40 @@
+{
+  "tickers": [
+    { "symbol": "SWDA",  "yf_symbol": "SWDA.L",  "label": "iShares MSCI World ETF" },
+    { "symbol": "VIX",   "yf_symbol": "^VIX",    "label": "CBOE Volatility Index" },
+    { "symbol": "UKOIL", "yf_symbol": "CRUD.L",  "label": "WisdomTree Brent Crude Oil ETP" },
+    { "symbol": "COPG",  "yf_symbol": "COPG.L",  "label": "Copper Miners ETF" },
+    { "symbol": "SSLN",  "yf_symbol": "SSLN.L",  "label": "Silver ETC" },
+    { "symbol": "SGLN",  "yf_symbol": "SGLN.L",  "label": "Gold ETC" },
+    { "symbol": "CYBP",  "yf_symbol": "CYBP.L",  "label": "Cybersecurity ETF" },
+    { "symbol": "IEUX",  "yf_symbol": "IEUX.L",  "label": "Europe ex-UK ETF" },
+    { "symbol": "NAVY",  "yf_symbol": "NAVY.L",  "label": "Defence / Naval ETF" },
+    { "symbol": "DFNG",  "yf_symbol": "DFNG.L",  "label": "Defence ETF" },
+    { "symbol": "GDGB",  "yf_symbol": "GDGB.L",  "label": "Gold Miners ETF (GBP)" },
+    { "symbol": "NUCG",  "yf_symbol": "NUCG.L",  "label": "Nuclear ETF" }
+  ],
+
+  "intervals": [
+    { "id": "1h",    "label": "1H",  "note": "~60 days of hourly bars" },
+    { "id": "1day",  "label": "1D",  "note": "2 years of daily bars" },
+    { "id": "1week", "label": "1W",  "note": "10 years of weekly bars" }
+  ],
+
+  "default_interval": "1day",
+
+  "chart": {
+    "indicators": {
+      "sma20":     true,
+      "sma50":     true,
+      "bollinger": false,
+      "volume":    true,
+      "rsi":       true,
+      "macd":      false
+    }
+  },
+
+  "output_dir": "portfolio_data",
+  "dashboard_file": "../portfolio_dashboard.html",
+
+  "note": "Data fetched via yfinance (Yahoo Finance) — no API key required. UKOIL mapped to CRUD.L (WisdomTree Brent Crude) as UKOIL.L is delisted on Yahoo Finance."
+}
