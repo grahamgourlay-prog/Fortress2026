@@ -25,11 +25,11 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install yfinance pandas numpy
+        run: pip install yfinance pandas numpy plotly
 
       - name: Fetch data and generate dashboard
         run: |
-          cd "Chart Dashboard"
+          cd chart-pipeline
           python fetch_portfolio.py
 
       - name: Commit and push updated dashboard
