@@ -117,27 +117,27 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 19 Mar 2026 · SGLN Capitulation 16@£66.8384 — all SGLN orders filled</div>
+<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 23 Mar 2026 · 4 orders filled: COPG 20@£39.49, GDGB 17@£63.54, NAVY 95@£8.69, DFNG 38@£51.19</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:89,avgCost:71.37,bookValue:6351.52,sealed:false,
    orders:[]},
-  {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:27,avgCost:51.55,bookValue:1391.84,sealed:false,
-   orders:[{label:"Queue Jump",price:51.50,amount:2000},{label:"Legacy Net",price:48.65,amount:1200},{label:"Wick Fisher",price:47.50,amount:1423.32}]},
+  {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:65,avgCost:51.40,bookValue:3340.88,sealed:false,
+   orders:[{label:"Legacy Net",price:48.65,amount:1200},{label:"Wick Fisher",price:47.50,amount:1423.32}]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:90,avgCost:60.69,bookValue:5462.44,sealed:false,
    orders:[]},
-  {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle",shares:14,avgCost:84.461,bookValue:1182.46,sealed:false,
-   orders:[{label:"Queue Jump",price:67.15,amount:1100},{label:"Capitulation Anchor",price:57.97,amount:1100}]},
+  {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle",shares:31,avgCost:73.12,bookValue:2266.67,sealed:false,
+   orders:[{label:"Capitulation Anchor",price:57.97,amount:1100}]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy",shares:40,avgCost:46.24,bookValue:1849.75,sealed:false,
    orders:[{label:"Mid Trap",price:40.60,amount:786.66}]},
   {ticker:"NUCG",name:"VanEck Uranium and Nuclear Technologies UCITS ETF",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
    orders:[{label:"Liquidity Wick",price:38.95,amount:798}]},
-  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit",shares:24,avgCost:49.571,bookValue:1189.71,sealed:false,
-   orders:[{label:"Liquidity Wick",price:39.50,amount:798.43}]},
+  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit",shares:44,avgCost:45.08,bookValue:1983.54,sealed:false,
+   orders:[]},
   {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets",shares:268,avgCost:5.02,bookValue:1345.09,sealed:true,
    orders:[]},
-  {ticker:"NAVY",name:"VanEck Future of European Defence UCITS ETF",role:"European rearmament pure-play",shares:181,avgCost:9.19508,bookValue:1664.31,sealed:false,
-   orders:[{label:"Deep Trap",price:8.70,amount:835}]},
+  {ticker:"NAVY",name:"VanEck Future of European Defence UCITS ETF",role:"European rearmament pure-play",shares:276,avgCost:9.034,bookValue:2493.47,sealed:false,
+   orders:[]},
 ];
 const SCENARIOS=[
   {label:"A — Systemic Dislocation",prob:"85%",color:"#1d4ed8",desc:"Private credit + Section 122 cliff + kinetic escalation → SWDA ladder triggers"},
