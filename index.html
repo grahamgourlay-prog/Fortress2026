@@ -117,15 +117,15 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 23 Mar 2026 · 4 orders filled: COPG 20@£39.49, GDGB 17@£63.54, NAVY 95@£8.69, DFNG 38@£51.19</div>
+<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 23 Mar 2026 · SGLN QJ 25@£54.00 + SSLN QJ 26@£37.00 placed — all SIPP cash deployed</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:89,avgCost:71.37,bookValue:6351.52,sealed:false,
-   orders:[]},
+   orders:[{label:"Queue Jump",price:54.00,amount:1353.99}]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:65,avgCost:51.40,bookValue:3340.88,sealed:false,
    orders:[{label:"Legacy Net",price:48.65,amount:1200},{label:"Wick Fisher",price:47.50,amount:1423.32}]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:90,avgCost:60.69,bookValue:5462.44,sealed:false,
-   orders:[]},
+   orders:[{label:"Queue Jump",price:37.00,amount:965.99}]},
   {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle",shares:31,avgCost:73.12,bookValue:2266.67,sealed:false,
    orders:[{label:"Capitulation Anchor",price:57.97,amount:1100}]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy",shares:40,avgCost:46.24,bookValue:1849.75,sealed:false,
