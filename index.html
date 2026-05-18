@@ -117,15 +117,15 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 15 May 2026 · SWDA ATH £104.95 — all triggers recalculated · GSR rotation: SGLN 119 sh; SSLN re-entry rung 1 filled (26@£55.99); rungs £54/£52 pending</div>
+<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 18 May 2026 · SWDA ATH £104.95 — all triggers recalculated · GSR rotation: SGLN 119 sh; SSLN re-entry rung 2 filled (53 sh @ avg £55.13); rung £52 pending</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:119,avgCost:70.31,bookValue:8366.52,sealed:false,
    orders:[{label:"Queue Jump",price:54.00,amount:1353.99}]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:118,avgCost:49.885,bookValue:5886.46,sealed:false,
    orders:[]},
-  {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze (GSR rotation re-entry in progress — rung 1 filled 15 May)",shares:26,avgCost:56.14,bookValue:1459.76,sealed:false,
-   orders:[{label:"GSR rotation",price:54.00,amount:1500},{label:"GSR rotation",price:52.00,amount:1517}]},
+  {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze (GSR rotation re-entry in progress — rung 2 filled 18 May)",shares:53,avgCost:55.13,bookValue:2921.66,sealed:false,
+   orders:[{label:"GSR rotation",price:52.00,amount:1517}]},
   {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle",shares:31,avgCost:73.12,bookValue:2266.67,sealed:false,
    orders:[{label:"Capitulation Anchor",price:57.97,amount:1100}]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy",shares:40,avgCost:46.24,bookValue:1849.75,sealed:false,
