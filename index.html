@@ -73,7 +73,11 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 /* ── Orders panel ───────────────────────────────────────────── */
 .orders-panel { border-top: 1px solid #f1f4f8; background: #f8f9fb; padding: 10px 14px; }
 .order-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; flex-wrap: wrap; }
-.order-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #7a8fa8; min-width: 110px; flex-shrink: 0; }
+.order-side { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; padding: 1px 5px; border-radius: 2px; min-width: 34px; text-align: center; flex-shrink: 0; }
+.order-side-buy { color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe; }
+.order-side-sell { color: #b45309; background: #fffbeb; border: 1px solid #fde68a; }
+.order-label { font-size: 11px; font-weight: 600; color: #4a5e78; min-width: 84px; flex-shrink: 0; }
+.order-shares { font-family: monospace; font-size: 11px; color: #7a8fa8; min-width: 46px; }
 .order-price { font-family: monospace; font-size: 12px; color: #1a2e4a; min-width: 52px; }
 .order-amt { font-family: monospace; font-size: 12px; color: #4a5e78; min-width: 46px; }
 .order-pct { font-family: monospace; font-size: 12px; font-weight: 700; padding: 1px 6px; border-radius: 3px; }
@@ -117,24 +121,24 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Prices persist via localStorage · Build: 21 May 2026 · SWDA ATH £104.95 — all triggers recalculated · GSR rotation complete: SGLN 119 sh; SSLN 84 sh @ avg £54.10 (all 3 rungs + cash sweep)</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 13 June 2026 · CYBP trimmed 201 sh @ £7.10 (12 Jun, +41%) · 5 sell-limit orders placed across the metals / miners / commodity complex (11 Jun) · expired buy traps (GDGB / IEUX / NUCG) cleared · SGLN Queue-Jump buy retained</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:119,avgCost:70.31,bookValue:8366.52,sealed:false,
-   orders:[{label:"Queue Jump",price:54.00,amount:1353.99}]},
+   orders:[{label:"Queue Jump",type:"buy",shares:25,price:54.00,amount:1353.99},{label:"Limit Sell",type:"sell",shares:90,price:72.00,amount:6476.01}]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:118,avgCost:49.885,bookValue:5886.46,sealed:false,
    orders:[]},
-  {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze (GSR rotation re-entry complete — all 3 rungs + cash sweep, 21 May)",shares:84,avgCost:54.10,bookValue:4544.18,sealed:false,
-   orders:[]},
+  {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.10,bookValue:4544.18,sealed:false,
+   orders:[{label:"Limit Sell",type:"sell",shares:60,price:55.00,amount:3296.01}]},
   {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle",shares:31,avgCost:73.12,bookValue:2266.67,sealed:false,
-   orders:[{label:"Capitulation Anchor",price:57.97,amount:1100}]},
+   orders:[{label:"Limit Sell",type:"sell",shares:23,price:74.00,amount:1698.01}]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy",shares:40,avgCost:46.24,bookValue:1849.75,sealed:false,
-   orders:[{label:"Mid Trap",price:40.60,amount:786.66}]},
-  {ticker:"NUCG",name:"VanEck Uranium and Nuclear Technologies UCITS ETF",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
-   orders:[{label:"Liquidity Wick",price:38.95,amount:798}]},
-  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit",shares:44,avgCost:45.08,bookValue:1983.54,sealed:false,
    orders:[]},
-  {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets",shares:268,avgCost:5.02,bookValue:1345.09,sealed:true,
+  {ticker:"NUCG",name:"VanEck Uranium and Nuclear Technologies UCITS ETF",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
+   orders:[{label:"Limit Sell",type:"sell",shares:19,price:47.00,amount:889.01}]},
+  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit",shares:44,avgCost:45.08,bookValue:1983.54,sealed:false,
+   orders:[{label:"Limit Sell",type:"sell",shares:33,price:51.00,amount:1679.01}]},
+  {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets (trimmed 201 sh @ £7.10, 12 Jun)",shares:67,avgCost:5.02,bookValue:336.27,sealed:false,
    orders:[]},
   {ticker:"NAVY",name:"VanEck Future of European Defence UCITS ETF",role:"European rearmament pure-play",shares:276,avgCost:9.034,bookValue:2493.47,sealed:false,
    orders:[]},
@@ -150,7 +154,7 @@ const FALLBACK_ATH=104.95; // last known SWDA ATH in GBP (10,495p — confirmed 
 // Baseline = total amount transferred into SIPP
 const BASELINE = 33859.58;
 
-const SK="fortress2026_v6";
+const SK="fortress2026_v7";
 const ATH_KEY="fortress2026_swda_ath";
 const gbp=n=>"£"+Math.abs(n).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
 const gbp0=n=>"£"+Math.abs(n).toLocaleString("en-GB",{maximumFractionDigits:0});
@@ -159,7 +163,8 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=0;
+const CASH_DEFAULT=5501.42; // ii cash balance, 13 Jun 2026
+let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
 function mktValOrder(){return [...POSITIONS].sort((a,b)=>{const va=prices[a.ticker]>0?prices[a.ticker]*a.shares:a.bookValue;const vb=prices[b.ticker]>0?prices[b.ticker]*b.shares:b.bookValue;return vb-va;}).map(p=>p.ticker);}
@@ -167,7 +172,7 @@ let positionOrder=mktValOrder();
 let _sortable=null;
 
 function saveState(){try{localStorage.setItem(SK,JSON.stringify({prices,prevCloses,macro,dryPowder,positionOrder}))}catch(_){}}
-function loadState(){try{const r=localStorage.getItem(SK);if(!r)return;const s=JSON.parse(r);prices=s.prices||{};prevCloses=s.prevCloses||{};macro=s.macro||{};dryPowder=typeof s.dryPowder==="number"?s.dryPowder:0;const defOrder=POSITIONS.map(p=>p.ticker);positionOrder=Array.isArray(s.positionOrder)&&s.positionOrder.length===defOrder.length?s.positionOrder:defOrder;fetched=new Set(Object.keys(prices));setStatus("Restored from last session — press Fetch to refresh","ok")}catch(_){}}
+function loadState(){try{const r=localStorage.getItem(SK);if(!r)return;const s=JSON.parse(r);prices=s.prices||{};prevCloses=s.prevCloses||{};macro=s.macro||{};dryPowder=typeof s.dryPowder==="number"?s.dryPowder:CASH_DEFAULT;const defOrder=POSITIONS.map(p=>p.ticker);positionOrder=Array.isArray(s.positionOrder)&&s.positionOrder.length===defOrder.length?s.positionOrder:defOrder;fetched=new Set(Object.keys(prices));setStatus("Restored from last session — press Fetch to refresh","ok")}catch(_){}}
 function resetOrder(){positionOrder=mktValOrder();saveState();renderPositions();}
 
 async function fetchAll(){
@@ -229,7 +234,11 @@ function renderMacro(){
 
 function renderPortfolio(){
   const tB=POSITIONS.reduce((s,p)=>s+p.bookValue,0);
-  const tP=POSITIONS.reduce((s,p)=>s+p.orders.reduce((a,o)=>a+o.amount,0),0);
+  // Pending orders, split by side (sells already counted at market value; buy reserve already in cash)
+  const buyOrders=POSITIONS.flatMap(p=>p.orders.filter(o=>o.type!=="sell"));
+  const sellOrders=POSITIONS.flatMap(p=>p.orders.filter(o=>o.type==="sell"));
+  const tBuy=buyOrders.reduce((a,o)=>a+o.amount,0);
+  const tSell=sellOrders.reduce((a,o)=>a+o.amount,0);
   const lv=POSITIONS.map(p=>prices[p.ticker]>0?prices[p.ticker]*p.shares:null);
   const allLive=lv.every(v=>v!==null);
   const tL=allLive?lv.reduce((a,v)=>a+v,0):null;
@@ -245,8 +254,9 @@ function renderPortfolio(){
   const tDay=allDay?dailyVals.reduce((a,v)=>a+v,0):null;
   const tDayPct=tL&&tDay!==null?tDay/(tL-tDay)*100:null;
 
-  // Portfolio total = market value + pending capital + dry powder
-  const portfolioTotal=tL!==null?tL+tP+dryPowder:null;
+  // Total = market value + cash. Pending orders never feed the total: a pending buy's
+  // capital already sits in cash, and a pending sell's shares are already in market value.
+  const portfolioTotal=tL!==null?tL+dryPowder:null;
 
   // Gain vs baseline
   const baselineGain=portfolioTotal!==null?portfolioTotal-BASELINE:null;
@@ -266,25 +276,28 @@ function renderPortfolio(){
         ${tDay!==null?`<div class="portfolio-sub" style="color:${tDay>=0?"#16803c":"#b91c1c"};margin-top:2px">${sgn(tDay)}${gbp(Math.abs(tDay))} today (${sgn(tDayPct)}${tDayPct.toFixed(2)}%)</div>`:""}
       </div>
       <div class="portfolio-col">
-        <div class="label">Pending Capital</div>
-        <div class="portfolio-val">${gbp0(tP)}</div>
-        <div class="portfolio-sub">${POSITIONS.reduce((s,p)=>s+p.orders.length,0)} GTC trap orders</div>
+        <div class="label">Pending Orders</div>
+        <div style="margin-top:5px;line-height:1.6">
+          <div style="font-family:monospace;font-size:13px;font-weight:700;color:#b45309">&#9650; ${gbp0(tSell)} <span style="font-size:10px;font-weight:600;color:#7a8fa8">sell · ${sellOrders.length}</span></div>
+          <div style="font-family:monospace;font-size:13px;font-weight:700;color:#1d4ed8">&#9660; ${gbp0(tBuy)} <span style="font-size:10px;font-weight:600;color:#7a8fa8">buy · ${buyOrders.length}</span></div>
+        </div>
+        <div class="portfolio-sub">GTC limit orders · not in total</div>
       </div>
       <div class="portfolio-col">
-        <div class="label">Dry Powder</div>
+        <div class="label">Cash</div>
         <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
           <span style="font-family:monospace;font-size:17px;font-weight:700;color:#7a8fa8">£</span>
           <input class="dp-input" type="number" min="0" step="100"
             value="${dryPowder.toFixed(2)}"
             onchange="onDryPowderChange(this.value)"
-            title="Edit dry powder (uninvested cash)">
+            title="Edit cash balance (ii uninvested cash)">
         </div>
-        <div class="portfolio-sub">uninvested cash · edit to update</div>
+        <div class="portfolio-sub">ii cash balance · edit to update</div>
       </div>
       <div class="portfolio-total-col">
         <div class="label">Total Portfolio</div>
         <div class="portfolio-total-val">${portfolioTotal!==null?gbp0(portfolioTotal):"—"}</div>
-        <div class="portfolio-sub">${portfolioTotal!==null?"market + pending + cash":"live prices needed"}</div>
+        <div class="portfolio-sub">${portfolioTotal!==null?"market + cash":"live prices needed"}</div>
       </div>
     </div>
     <div class="baseline-row">
@@ -292,7 +305,7 @@ function renderPortfolio(){
       ${baselineGain!==null
         ?`<span class="baseline-val" style="color:${baselineGain>=0?"#16803c":"#b91c1c"}">${baselineGain>=0?"+":"−"}${gbp(Math.abs(baselineGain))}</span>
           <span class="baseline-val" style="color:${baselineGain>=0?"#16803c":"#b91c1c"}">${sgn(baselinePct)}${baselinePct.toFixed(2)}%</span>`
-        :`<span style="font-size:11px;color:#a8b8cc">enter dry powder + fetch live prices to calculate</span>`
+        :`<span style="font-size:11px;color:#a8b8cc">enter cash + fetch live prices to calculate</span>`
       }
     </div>`;
 }
@@ -314,12 +327,14 @@ function renderPositions(){
     const dayPct=lp>0&&pc>0?pct(lp,pc):null;
     const dayPos=dayAbs!==null&&dayAbs>=0;
 
-    // Orders panel (always shown if orders exist)
+    // Orders panel (always shown if orders exist) — buy + sell supported
     const ordersHtml=pos.orders.length>0
-      ?`<div class="orders-panel"><div class="label" style="margin-bottom:6px">Pending Orders — % ${lp>0?"vs live":"vs avg cost"}</div>${pos.orders.map(o=>{
+      ?`<div class="orders-panel"><div class="label" style="margin-bottom:6px">Pending Orders — gap to trigger (% ${lp>0?"vs live":"vs avg cost"})</div>${pos.orders.map(o=>{
+          const isSell=o.type==="sell";
           const d=pct(o.price,ref);
-          const pr=o.price<10?`£${o.price.toFixed(3)}`:`${o.price.toFixed(2)}p`;
-          return`<div class="order-row"><span class="order-label">${o.label}</span><span class="order-price">${pr}</span><span class="order-amt">${gbp0(o.amount)}</span><span class="order-pct" style="${dStyle(d)}">${sgn(d)}${d.toFixed(1)}%</span></div>`;
+          const pr=`£${fmt(o.price)}`;
+          const sh=o.shares?`${o.shares} sh`:"";
+          return`<div class="order-row"><span class="order-side ${isSell?"order-side-sell":"order-side-buy"}">${isSell?"SELL":"BUY"}</span><span class="order-label">${o.label}</span><span class="order-shares">${sh}</span><span class="order-price">${pr}</span><span class="order-amt">${gbp0(o.amount)}</span><span class="order-pct" style="${dStyle(d)}">${sgn(d)}${d.toFixed(1)}%</span></div>`;
         }).join("")}</div>`
       :"";
 
