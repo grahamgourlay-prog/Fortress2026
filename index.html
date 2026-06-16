@@ -121,7 +121,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 13 June 2026 · CYBP trimmed 201 sh @ £7.10 (12 Jun, +41%) · 5 sell-limit orders placed across the metals / miners / commodity complex (11 Jun) · expired buy traps (GDGB / IEUX / NUCG) cleared · SGLN Queue-Jump buy retained</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 16 June 2026 · COPG sell-limit filled 33 sh @ £51.36 (15 Jun, +14%) → 11 sh retained · 2 re-entry buys placed (COPG 33 @ £46.00, CYBP 201 @ £5.60) · SGLN £54 Queue-Jump re-placed · 4 sell-limits live (SGLN / SSLN / GDGB / NUCG)</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:119,avgCost:70.31,bookValue:8366.52,sealed:false,
@@ -136,10 +136,10 @@ const POSITIONS=[
    orders:[]},
   {ticker:"NUCG",name:"VanEck Uranium and Nuclear Technologies UCITS ETF",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
    orders:[{label:"Limit Sell",type:"sell",shares:19,price:47.00,amount:889.01}]},
-  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit",shares:44,avgCost:45.08,bookValue:1983.54,sealed:false,
-   orders:[{label:"Limit Sell",type:"sell",shares:33,price:51.00,amount:1679.01}]},
+  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit (trimmed 33 sh @ £51.36, 15 Jun)",shares:11,avgCost:45.08,bookValue:495.89,sealed:false,
+   orders:[{label:"Re-entry",type:"buy",shares:33,price:46.00,amount:1521.99}]},
   {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets (trimmed 201 sh @ £7.10, 12 Jun)",shares:67,avgCost:5.02,bookValue:336.27,sealed:false,
-   orders:[]},
+   orders:[{label:"Re-entry",type:"buy",shares:201,price:5.60,amount:1129.59}]},
   {ticker:"NAVY",name:"VanEck Future of European Defence UCITS ETF",role:"European rearmament pure-play",shares:276,avgCost:9.034,bookValue:2493.47,sealed:false,
    orders:[]},
 ];
@@ -154,7 +154,7 @@ const FALLBACK_ATH=104.95; // last known SWDA ATH in GBP (10,495p — confirmed 
 // Baseline = total amount transferred into SIPP
 const BASELINE = 33859.58;
 
-const SK="fortress2026_v7";
+const SK="fortress2026_v8";
 const ATH_KEY="fortress2026_swda_ath";
 const gbp=n=>"£"+Math.abs(n).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
 const gbp0=n=>"£"+Math.abs(n).toLocaleString("en-GB",{maximumFractionDigits:0});
@@ -163,7 +163,7 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-const CASH_DEFAULT=5501.42; // ii cash balance, 13 Jun 2026
+const CASH_DEFAULT=7192.31; // ii cash balance, 16 Jun 2026 (post COPG sale)
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
