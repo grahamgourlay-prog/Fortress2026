@@ -121,7 +121,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 16 June 2026 · COPG sell-limit filled 33 sh @ £51.36 (15 Jun, +14%) → 11 sh retained · 2 re-entry buys placed (COPG 33 @ £46.00, CYBP 201 @ £5.60) · SGLN £54 Queue-Jump re-placed · 4 sell-limits live (SGLN / SSLN / GDGB / NUCG)</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 19 June 2026 · GDGB sell-limit filled 23 sh @ £74.02 (17 Jun, +1% vs avg) → 8 sh retained · GDGB £64 re-entry buy placed (23 sh) · 3 sell-limits live (SGLN / SSLN / NUCG) · 4 re-entry buys live (COPG £46 / CYBP £5.60 / SGLN £54 / GDGB £64)</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:119,avgCost:70.31,bookValue:8366.52,sealed:false,
@@ -130,8 +130,8 @@ const POSITIONS=[
    orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.10,bookValue:4544.18,sealed:false,
    orders:[{label:"Limit Sell",type:"sell",shares:60,price:55.00,amount:3296.01}]},
-  {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle",shares:31,avgCost:73.12,bookValue:2266.67,sealed:false,
-   orders:[{label:"Limit Sell",type:"sell",shares:23,price:74.00,amount:1698.01}]},
+  {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle (trimmed 23 sh @ £74.02, 17 Jun)",shares:8,avgCost:73.12,bookValue:584.95,sealed:false,
+   orders:[{label:"Re-entry",type:"buy",shares:23,price:64.00,amount:1475.99}]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy",shares:40,avgCost:46.24,bookValue:1849.75,sealed:false,
    orders:[]},
   {ticker:"NUCG",name:"VanEck Uranium and Nuclear Technologies UCITS ETF",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
@@ -163,7 +163,7 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-const CASH_DEFAULT=7192.31; // ii cash balance, 16 Jun 2026 (post COPG sale)
+const CASH_DEFAULT=8890.70; // ii cash balance, 19 Jun 2026 (post COPG + GDGB sales)
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
