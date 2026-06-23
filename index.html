@@ -121,7 +121,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 19 June 2026 · GDGB sell-limit filled 23 sh @ £74.02 (17 Jun, +1% vs avg) → 8 sh retained · GDGB £64 re-entry buy placed (23 sh) · 3 sell-limits live (SGLN / SSLN / NUCG) · 4 re-entry buys live (COPG £46 / CYBP £5.60 / SGLN £54 / GDGB £64)</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 23 June 2026 · SSLN £38.60 Queue-Jump buy placed (30 sh, 23 Jun) — deep-dip re-entry bracketing the £55 sell-limit · 3 sell-limits live (SGLN / SSLN / NUCG) · 5 buy-limits live (COPG £46 / CYBP £5.60 / SGLN £54 / GDGB £64 / SSLN £38.60)</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:119,avgCost:70.31,bookValue:8366.52,sealed:false,
@@ -129,7 +129,7 @@ const POSITIONS=[
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:118,avgCost:49.885,bookValue:5886.46,sealed:false,
    orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.10,bookValue:4544.18,sealed:false,
-   orders:[{label:"Limit Sell",type:"sell",shares:60,price:55.00,amount:3296.01}]},
+   orders:[{label:"Queue Jump",type:"buy",shares:30,price:38.60,amount:1161.99},{label:"Limit Sell",type:"sell",shares:60,price:55.00,amount:3296.01}]},
   {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle (trimmed 23 sh @ £74.02, 17 Jun)",shares:8,avgCost:73.12,bookValue:584.95,sealed:false,
    orders:[{label:"Re-entry",type:"buy",shares:23,price:64.00,amount:1475.99}]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy",shares:40,avgCost:46.24,bookValue:1849.75,sealed:false,
