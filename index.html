@@ -121,7 +121,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 23 June 2026 · SSLN £38.60 Queue-Jump buy placed (30 sh, 23 Jun) — deep-dip re-entry bracketing the £55 sell-limit · 3 sell-limits live (SGLN / SSLN / NUCG) · 5 buy-limits live (COPG £46 / CYBP £5.60 / SGLN £54 / GDGB £64 / SSLN £38.60)</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 24 June 2026 · GDGB £64 & COPG £46 re-entry buys filled 24 Jun (GDGB 23 sh @ £63.97 → 31 sh; COPG 33 sh @ £45.94 → 44 sh) · 3 sell-limits live (SGLN / SSLN / NUCG) · 3 buy-limits live (CYBP £5.60 / SGLN £54 / SSLN £38.60)</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor",shares:119,avgCost:70.31,bookValue:8366.52,sealed:false,
@@ -130,14 +130,14 @@ const POSITIONS=[
    orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.10,bookValue:4544.18,sealed:false,
    orders:[{label:"Queue Jump",type:"buy",shares:30,price:38.60,amount:1161.99},{label:"Limit Sell",type:"sell",shares:60,price:55.00,amount:3296.01}]},
-  {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle (trimmed 23 sh @ £74.02, 17 Jun)",shares:8,avgCost:73.12,bookValue:584.95,sealed:false,
-   orders:[{label:"Re-entry",type:"buy",shares:23,price:64.00,amount:1475.99}]},
+  {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle (re-entry 23 sh @ £63.97, 24 Jun)",shares:31,avgCost:66.45871,bookValue:2060.22,sealed:false,
+   orders:[]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy",shares:40,avgCost:46.24,bookValue:1849.75,sealed:false,
    orders:[]},
   {ticker:"NUCG",name:"VanEck Uranium and Nuclear Technologies UCITS ETF",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
    orders:[{label:"Limit Sell",type:"sell",shares:19,price:47.00,amount:889.01}]},
-  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit (trimmed 33 sh @ £51.36, 15 Jun)",shares:11,avgCost:45.08,bookValue:495.89,sealed:false,
-   orders:[{label:"Re-entry",type:"buy",shares:33,price:46.00,amount:1521.99}]},
+  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit (re-entry 33 sh @ £45.94, 24 Jun)",shares:44,avgCost:45.8175,bookValue:2015.97,sealed:false,
+   orders:[]},
   {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets (trimmed 201 sh @ £7.10, 12 Jun)",shares:67,avgCost:5.02,bookValue:336.27,sealed:false,
    orders:[{label:"Re-entry",type:"buy",shares:201,price:5.60,amount:1129.59}]},
   {ticker:"NAVY",name:"VanEck Future of European Defence UCITS ETF",role:"European rearmament pure-play",shares:276,avgCost:9.034,bookValue:2493.47,sealed:false,
@@ -154,7 +154,7 @@ const FALLBACK_ATH=104.95; // last known SWDA ATH in GBP (10,495p — confirmed 
 // Baseline = total amount transferred into SIPP
 const BASELINE = 33859.58;
 
-const SK="fortress2026_v8";
+const SK="fortress2026_v9";
 const ATH_KEY="fortress2026_swda_ath";
 const gbp=n=>"£"+Math.abs(n).toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
 const gbp0=n=>"£"+Math.abs(n).toLocaleString("en-GB",{maximumFractionDigits:0});
@@ -163,7 +163,7 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-const CASH_DEFAULT=8890.70; // ii cash balance, 19 Jun 2026 (post COPG + GDGB sales)
+const CASH_DEFAULT=5894.08; // ii cash balance, 24 Jun 2026 (post COPG + GDGB re-entry buys)
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
