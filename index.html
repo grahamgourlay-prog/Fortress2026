@@ -121,10 +121,10 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 31 July 2026 · SGLN buys filled 29 Jul (19 sh @ £58.40) &amp; 30 Jul (18 sh @ £58.81) → 156 sh · COPG trimmed 22 sh @ ~£46.27 → 22 sh · SGLN £72 sell-limit no longer in the order book · 2 sell-limits live (SSLN / NUCG) · 3 buy-limits live (CYBP £5.60 / SGLN £54 / SSLN £38.60)</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 31 July 2026 · SGLN buys booked 31 Jul (19 sh @ £58.40 + 18 sh @ £58.81) → 156 sh · COPG trimmed 22 sh @ £46.27 (30 Jul) → 22 sh · SGLN £72 sell-limit no longer in the order book · 2 sell-limits live (SSLN / NUCG) · 3 buy-limits live (CYBP £5.60 / SGLN £54 / SSLN £38.60)</div>
 <script>
 const POSITIONS=[
-  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (added 19 sh @ £58.40 29 Jul + 18 sh @ £58.81 30 Jul)",shares:156,avgCost:67.580769,bookValue:10542.60,sealed:false,
+  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (added 19+18 sh @ ~£58.40/£58.81, booked 31 Jul)",shares:156,avgCost:67.580769,bookValue:10542.60,sealed:false,
    orders:[{label:"Queue Jump",type:"buy",shares:25,price:54.00,amount:1353.99}]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:118,avgCost:49.885,bookValue:5886.46,sealed:false,
    orders:[]},
@@ -136,7 +136,7 @@ const POSITIONS=[
    orders:[]},
   {ticker:"NUCG",name:"VanEck Uranium and Nuclear Technologies UCITS ETF",role:"AI baseload / uranium squeeze",shares:26,avgCost:46.651,bookValue:1212.93,sealed:false,
    orders:[{label:"Limit Sell",type:"sell",shares:19,price:47.00,amount:889.01}]},
-  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit (trimmed 22 sh @ ~£46.27, Jul)",shares:22,avgCost:45.817273,bookValue:1007.98,sealed:false,
+  {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit (trimmed 22 sh @ £46.27, 30 Jul)",shares:22,avgCost:45.817273,bookValue:1007.98,sealed:false,
    orders:[]},
   {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets (trimmed 201 sh @ £7.10, 12 Jun)",shares:67,avgCost:5.02,bookValue:336.27,sealed:false,
    orders:[{label:"Re-entry",type:"buy",shares:201,price:5.60,amount:1129.59}]},
