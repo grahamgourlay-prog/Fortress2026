@@ -121,13 +121,13 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 6 August 2026 · NAVY sell-limit filled 6 Aug 10:21 (138 sh @ £9.3096) → 138 sh · SGLN buy-limit filled 6 Aug (20 sh @ £61.32) → 176 sh, avg £66.89 · GDGB (16 sh @ £69.05) and IEUX (20 sh @ £48.51) sell-limits filled 5 Aug → 15 sh / 20 sh · 2 sell-limits live (SSLN £55 / NUCG £47 — £4,185.02 to realise) · 3 buy-limits live (CYBP £5.60 / SGLN £54 / SSLN £38.60 — £3,645.57 to deploy) · SGLN now 42.2% of book cost, un-trimmed</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 11 August 2026 · New DFNG sell-limit found on the 11 Aug ii order export, submitted 7 Aug 08:38 (59 sh @ £50.00, ref 27726JB225G) — added to the dashboard, no other order or holding changes since 6 Aug · 3 sell-limits live (SSLN £55 / NUCG £47 / DFNG £50 — £7,131.03 to realise) · 3 buy-limits live (CYBP £5.60 / SGLN £54 / SSLN £38.60 — £3,645.57 to deploy) · SGLN still 42.2% of book cost, un-trimmed</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+20 sh 6 Aug @ £61.32; +37 sh 31 Jul; £72 trim cancelled — letting it run)",shares:176,avgCost:66.891932,bookValue:11772.98,sealed:false,
    orders:[{label:"Queue Jump",type:"buy",shares:25,price:54.00,amount:1353.99}]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:118,avgCost:49.885254,bookValue:5886.46,sealed:false,
-   orders:[]},
+   orders:[{label:"Limit Sell",type:"sell",shares:59,price:50.00,amount:2946.01}]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.097381,bookValue:4544.18,sealed:false,
    orders:[{label:"Queue Jump",type:"buy",shares:30,price:38.60,amount:1161.99},{label:"Limit Sell",type:"sell",shares:60,price:55.00,amount:3296.01}]},
   {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle (trimmed 16 sh @ £69.05, 5 Aug)",shares:15,avgCost:66.458667,bookValue:996.88,sealed:false,
