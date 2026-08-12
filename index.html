@@ -121,13 +121,13 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 11 August 2026 · New DFNG sell-limit found on the 11 Aug ii order export, submitted 7 Aug 08:38 (59 sh @ £50.00, ref 27726JB225G) — added to the dashboard, no other order or holding changes since 6 Aug · 3 sell-limits live (SSLN £55 / NUCG £47 / DFNG £50 — £7,131.03 to realise) · 3 buy-limits live (CYBP £5.60 / SGLN £54 / SSLN £38.60 — £3,645.57 to deploy) · SGLN still 42.2% of book cost, un-trimmed</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 12 August 2026 · DFNG £50.00 sell-limit EXECUTED 12 Aug (59 of 118 sh @ £50.0297, ref 27726JB225G, proceeds £2,947.76 net) — DFNG halved to 59 sh, cash to £9,845.16; no other holding or order change · 2 sell-limits live (SSLN £55 / NUCG £47 — £4,185.02 to realise) · 3 buy-limits live (CYBP £5.60 / SGLN £54 / SSLN £38.60 — £3,645.57 to deploy) · SGLN now 47.1% of book cost, un-trimmed</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+20 sh 6 Aug @ £61.32; +37 sh 31 Jul; £72 trim cancelled — letting it run)",shares:176,avgCost:66.891932,bookValue:11772.98,sealed:false,
    orders:[{label:"Queue Jump",type:"buy",shares:25,price:54.00,amount:1353.99}]},
-  {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge",shares:118,avgCost:49.885254,bookValue:5886.46,sealed:false,
-   orders:[{label:"Limit Sell",type:"sell",shares:59,price:50.00,amount:2946.01}]},
+  {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge (halved 59 sh @ £50.03, 12 Aug)",shares:59,avgCost:49.885254,bookValue:2943.23,sealed:false,
+   orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.097381,bookValue:4544.18,sealed:false,
    orders:[{label:"Queue Jump",type:"buy",shares:30,price:38.60,amount:1161.99},{label:"Limit Sell",type:"sell",shares:60,price:55.00,amount:3296.01}]},
   {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle (trimmed 16 sh @ £69.05, 5 Aug)",shares:15,avgCost:66.458667,bookValue:996.88,sealed:false,
@@ -163,7 +163,7 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-const CASH_DEFAULT=6897.54; // ii DISPLAYED cash, 6 Aug 2026 (authoritative; ledger closes at £6,865.31, the £32.23 gap is accrued-but-unposted interest). Incl. cash reserved for open buy limits.
+const CASH_DEFAULT=9845.16; // ii DISPLAYED cash, 12 Aug 2026 (authoritative; ledger closes at £9,813.07 after the DFNG sell credit, the £32.09 gap is accrued-but-unposted interest). Incl. cash reserved for open buy limits.
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
