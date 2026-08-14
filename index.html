@@ -121,11 +121,11 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 12 August 2026 · DFNG £50.00 sell-limit EXECUTED 12 Aug (59 of 118 sh @ £50.0297, ref 27726JB225G, proceeds £2,947.76 net) — DFNG halved to 59 sh, cash to £9,845.16; no other holding or order change · 2 sell-limits live (SSLN £55 / NUCG £47 — £4,185.02 to realise) · 3 buy-limits live (CYBP £5.60 / SGLN £54 / SSLN £38.60 — £3,645.57 to deploy) · SGLN now 47.1% of book cost, un-trimmed</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 14 August 2026 · 2 new SGLN buy-limits placed 14 Aug — £2,000.00 @ £60.70 (ref 27726JCXS86, 00:51) and £2,000.00 @ £58.00 (ref 27726JCXTBK, 01:03), both GTC, qty TBC at execution; no other holding or order change since 12 Aug · 2 sell-limits live (SSLN £55 / NUCG £47 — £4,185.02 to realise) · 5 buy-limits live (CYBP £5.60 / SGLN £54 + £60.70 + £58.00 / SSLN £38.60 — £7,645.57 to deploy) · SGLN now 47.1% of book cost, un-trimmed, with three live buy-limits stacked beneath it</div>
 <script>
 const POSITIONS=[
   {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+20 sh 6 Aug @ £61.32; +37 sh 31 Jul; £72 trim cancelled — letting it run)",shares:176,avgCost:66.891932,bookValue:11772.98,sealed:false,
-   orders:[{label:"Queue Jump",type:"buy",shares:25,price:54.00,amount:1353.99}]},
+   orders:[{label:"Queue Jump",type:"buy",shares:25,price:54.00,amount:1353.99},{label:"Dip Add",type:"buy",price:60.70,amount:2000.00},{label:"Deep Add",type:"buy",price:58.00,amount:2000.00}]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge (halved 59 sh @ £50.03, 12 Aug)",shares:59,avgCost:49.885254,bookValue:2943.23,sealed:false,
    orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.097381,bookValue:4544.18,sealed:false,
