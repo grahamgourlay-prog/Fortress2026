@@ -121,11 +121,11 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 24 August 2026 · SGLN buy-limit EXECUTED 24 Aug — 28 sh @ £66.12697 (ref 27726JH48L2, limit £66.30, £1,855.55, settles 26 Aug) → SGLN 204 sh, avg £66.81, book £13,628.53 · new 25 sh @ £65.60 SGLN buy-limit placed (ref 27726JH48LQ, £1,643.99, PENDING) · £54.00 Queue Jump CANCELLED · 2 sell-limits live (SSLN £55 / NUCG £47 — £4,185.02 to realise) · 5 buy-limits live (CYBP £5.60 / SGLN £65.60 + £60.70 + £58.00 / SSLN £38.60 — £7,935.57 to deploy) · SGLN now 50.8% of book cost, un-trimmed</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 25 August 2026 · SGLN £65.60 buy-limit EXECUTED 25 Aug 14:24:58 — 25 sh @ £65.59634 (ref 27726JH48LQ, £1,643.90 = £1,639.91 ETFs + £3.99 commission, settles 27 Aug) → SGLN 229 sh, avg £66.69, book £15,272.43 · 2 sell-limits live (SSLN £55 / NUCG £47 — £4,185.02 to realise) · 4 buy-limits live (CYBP £5.60 / SGLN £60.70 + £58.00 / SSLN £38.60 — £6,291.58 to deploy) · SGLN now 53.6% of book cost, un-trimmed</div>
 <script>
 const POSITIONS=[
-  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+28 sh 24 Aug @ £66.13; +20 sh 6 Aug @ £61.32; £54 Queue Jump cancelled — letting it run)",shares:204,avgCost:66.806520,bookValue:13628.53,sealed:false,
-   orders:[{label:"Near Add",type:"buy",shares:25,price:65.60,amount:1643.99},{label:"Dip Add",type:"buy",price:60.70,amount:2000.00},{label:"Deep Add",type:"buy",price:58.00,amount:2000.00}]},
+  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+25 sh 25 Aug @ £65.60; +28 sh 24 Aug @ £66.13; +20 sh 6 Aug @ £61.32 — letting it run)",shares:229,avgCost:66.691834,bookValue:15272.43,sealed:false,
+   orders:[{label:"Dip Add",type:"buy",price:60.70,amount:2000.00},{label:"Deep Add",type:"buy",price:58.00,amount:2000.00}]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge (halved 59 sh @ £50.03, 12 Aug)",shares:59,avgCost:49.885254,bookValue:2943.23,sealed:false,
    orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.097381,bookValue:4544.18,sealed:false,
@@ -163,7 +163,7 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-const CASH_DEFAULT=7989.69; // ii DISPLAYED cash, 24 Aug 2026 (authoritative) = GBP £7,957.52 + EUR €37.58 (£32.17). GBP balance already nets the −£1,855.55 pending SGLN buy settlement (settles 26 Aug). The EUR £32.17 matches the previously-unexplained ~£32 "accrued interest" gap — that gap was likely the EUR cash all along.
+const CASH_DEFAULT=6345.77; // ii DISPLAYED cash, 25 Aug 2026 (authoritative) = GBP £6,313.62 + EUR €37.58 (£32.15). GBP balance already nets the −£1,643.90 SGLN buy settlement (settles 27 Aug). The EUR £32.15 is the standing ~£32 accrued-interest / EUR-cash gap seen since 31 Jul.
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
