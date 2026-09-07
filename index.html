@@ -121,15 +121,15 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 1 September 2026 · SGLN £62.83 buy-limit EXECUTED 1 Sep 11:45:13 — 16 sh @ £62.77937 (ref 27726KBDS9S, £1,008.47 = £1,004.48 ETFs + £3.99 commission, settles 3 Sep) → SGLN 245 sh, avg £66.45, book £16,280.90 · SSLN £38.60 Queue Jump buy CANCELLED (ref 27726HD25DK) · 2 sell-limits live (SSLN £55 / NUCG £47 — £4,185.02 to realise) · 3 buy-limits live (CYBP £5.60 / SGLN £60.70 + £58.00 — £5,129.59 to deploy) · SGLN 55.2% of SIPP book cost (~7.8% of the ~£197.9k combined pension — Fidelity £164,559.99 + ii £33,346.91 — within the 10-15% gold target)</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 7 September 2026 · SGLN £63.50 buy-limit EXECUTED 7 Sep 08:00:56 — 21 sh @ £63.008499 (ref 27726KBXGBB, £1,327.17 = £1,323.18 ETFs + £3.99 commission, settles 9 Sep) → SGLN 266 sh, avg £66.20, book £17,608.07 · SSLN £55 sell-limit CANCELLED (ref 27726HCRGQQ) · CYBP £5.60 re-entry buy CANCELLED (ref 27726HC6RTR) · 1 sell-limit live (NUCG £47 — £889.01 to realise) · 2 buy-limits live (SGLN £60.70 + £58.00 — £4,000.00 to deploy) · SGLN 57.1% of SIPP book cost (~8.5% of the ~£198.0k combined pension — Fidelity £164,559.99 + ii £33,464.62 — within the 10-15% gold target)</div>
 <script>
 const POSITIONS=[
-  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+16 sh 1 Sep @ £62.78; +25 sh 25 Aug @ £65.60; +28 sh 24 Aug @ £66.13 — letting it run)",shares:245,avgCost:66.452653,bookValue:16280.90,sealed:false,
+  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+21 sh 7 Sep @ £63.01; +16 sh 1 Sep @ £62.78; +25 sh 25 Aug @ £65.60 — letting it run)",shares:266,avgCost:66.195752,bookValue:17608.07,sealed:false,
    orders:[{label:"Dip Add",type:"buy",price:60.70,amount:2000.00},{label:"Deep Add",type:"buy",price:58.00,amount:2000.00}]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge (halved 59 sh @ £50.03, 12 Aug)",shares:59,avgCost:49.885254,bookValue:2943.23,sealed:false,
    orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.097381,bookValue:4544.18,sealed:false,
-   orders:[{label:"Limit Sell",type:"sell",shares:60,price:55.00,amount:3296.01}]},
+   orders:[]},
   {ticker:"GDGB",name:"VanEck Gold Miners UCITS ETF",role:"Miner margin super-cycle (trimmed 16 sh @ £69.05, 5 Aug)",shares:15,avgCost:66.458667,bookValue:996.88,sealed:false,
    orders:[]},
   {ticker:"IEUX",name:"iShares MSCI Europe ex-UK ETF",role:"Scenario C / rearmament economy (trimmed 20 sh @ £48.51, 5 Aug)",shares:20,avgCost:46.244,bookValue:924.88,sealed:false,
@@ -138,8 +138,8 @@ const POSITIONS=[
    orders:[{label:"Limit Sell",type:"sell",shares:19,price:47.00,amount:889.01}]},
   {ticker:"COPG",name:"Global X Copper Miners ETF",role:"AI infrastructure deficit (trimmed 22 sh @ £46.27, 30 Jul)",shares:22,avgCost:45.817273,bookValue:1007.98,sealed:false,
    orders:[]},
-  {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets (trimmed 201 sh @ £7.10, 12 Jun)",shares:67,avgCost:5.018955,bookValue:336.27,sealed:false,
-   orders:[{label:"Re-entry",type:"buy",shares:201,price:5.60,amount:1129.59}]},
+  {ticker:"CYBP",name:"Rize Cyber Security ETF",role:"High-beta alpha / M&A targets (trimmed 201 sh @ £7.10, 12 Jun; re-entry buy cancelled 7 Sep)",shares:67,avgCost:5.018955,bookValue:336.27,sealed:false,
+   orders:[]},
   {ticker:"NAVY",name:"VanEck Future of European Defence UCITS ETF",role:"European rearmament pure-play (halved 138 sh @ £9.31, 6 Aug)",shares:138,avgCost:9.034312,bookValue:1246.74,sealed:false,
    orders:[]},
 ];
@@ -163,7 +163,7 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-const CASH_DEFAULT=5348.07; // ii DISPLAYED cash, 1 Sep 2026 (authoritative) = GBP £5,315.87 + EUR ~£32.20. GBP balance already nets the −£1,008.47 SGLN buy settlement (settles 3 Sep). The EUR ~£32 is the standing accrued-interest / EUR-cash gap seen since 31 Jul.
+const CASH_DEFAULT=4020.99; // ii DISPLAYED cash, 7 Sep 2026 (authoritative) = GBP £3,988.70 + EUR ~£32.29. GBP balance already nets the −£1,327.17 SGLN buy settlement (settles 9 Sep). The EUR ~£32 is the standing accrued-interest / EUR-cash gap seen since 31 Jul.
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
