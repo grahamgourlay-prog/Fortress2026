@@ -121,11 +121,11 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 28 September 2026 · SGLN £60.70 buy-limit EXECUTED 28 Sep 09:18:44 — 32 sh @ £60.699 (ref 27726JCXS86, £1,946.36 = £1,942.37 ETFs + £3.99 commission, settles 30 Sep) → SGLN 298 sh, avg £65.62, book £19,554.43 · NUCG £47 sell-limit EXPIRED (placed 11 Jun; 90-day GTC limit, ~9 Sep; confirmed) · no sell-limits live · 1 buy-limit live (SGLN £58.00 — £2,000.00 to deploy, expires ~12 Nov) · SGLN 59.7% of SIPP book cost (~9.2% of the ~£197.0k combined pension at market value — Fidelity £164,559.99 + ii £32,400.00 — within the 10-15% gold target)</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 25 October 2026 · SGLN two buy-limits EXECUTED 23 Oct — 17 sh @ £58.298 (limit £58.32, 15:00:36, ref 27726LDWZGM, £995.06) and 18 sh @ £57.99319 (limit £58.00, 15:17:37, ref 27726LDWZL4, £1,047.87), both settle 27 Oct → SGLN 333 sh, avg £64.8569, book £21,597.36 · no orders live · ii 25 Oct: investments £30,486.59, cash £39.96, SIPP total £30,526.55 · SGLN 62.0% of SIPP book cost (~9.9% of the ~£195.1k combined pension at market value — Fidelity £164,559.99 at 31 Aug + ii £30,526.55 — within the 10-15% gold target)</div>
 <script>
 const POSITIONS=[
-  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+32 sh 28 Sep @ £60.70; +21 sh 7 Sep @ £63.01; +16 sh 1 Sep @ £62.78 — letting it run)",shares:298,avgCost:65.618893,bookValue:19554.43,sealed:false,
-   orders:[{label:"Deep Add",type:"buy",price:58.00,amount:2000.00}]},
+  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+18 sh @ £57.99 and +17 sh @ £58.30, 23 Oct; +32 sh 28 Sep @ £60.70; +21 sh 7 Sep @ £63.01 — letting it run)",shares:333,avgCost:64.856937,bookValue:21597.36,sealed:false,
+   orders:[]},
   {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge (halved 59 sh @ £50.03, 12 Aug)",shares:59,avgCost:49.885254,bookValue:2943.23,sealed:false,
    orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.097381,bookValue:4544.18,sealed:false,
@@ -163,7 +163,7 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-const CASH_DEFAULT=2081.98; // ii DISPLAYED cash, 28 Sep 2026 (authoritative) = GBP £2,049.69 + EUR ~£32.29. GBP balance already nets the −£1,946.36 SGLN buy settlement (settles 30 Sep) and the £7.35 credit of 25 Sep. The EUR ~£32 is the standing accrued-interest / EUR-cash gap seen since 31 Jul.
+const CASH_DEFAULT=39.96; // ii DISPLAYED cash, 25 Oct 2026 (authoritative) = GBP £6.76 + EUR ~£33.20. GBP balance already nets the two SGLN buys of 23 Oct (−£995.06 and −£1,047.87, both settle 27 Oct). The EUR ~£32 is the standing accrued-interest / EUR-cash gap seen since 31 Jul.
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)
