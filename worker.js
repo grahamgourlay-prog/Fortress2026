@@ -1,6 +1,7 @@
 // Fortress 2026 — Cloudflare Worker
 // Uses Yahoo Finance (no API key required)
 // LSE ETFs: .L suffix, prices returned in GBp (pence) → divide by 100 for GBP
+// US stocks (NVDA): no suffix, prices returned in USD → divide by GBPUSD=X for GBP
 // ATH is managed client-side (localStorage) — Yahoo Finance data unreliable for SWDA.L
 
 export default {
@@ -45,9 +46,15 @@ export default {
       }
     };
 
-    // GBp (pence) → GBP conversion; everything else returned as-is
-    const toGBP = (raw, currency) =>
-      raw !== null && currency === "GBp" ? raw / 100 : raw;
+    // GBp (pence) → GBP; USD → GBP at the live GBP/USD rate; everything else as-is.
+    // A USD price with no FX rate returns null, so the dashboard never shows dollars as pounds.
+    let gbpusd = null;
+    const toGBP = (raw, currency) => {
+      if (raw === null) return null;
+      if (currency === "GBp") return raw / 100;
+      if (currency === "USD") return gbpusd > 0 ? raw / gbpusd : null;
+      return raw;
+    };
 
     // LSE ETFs — Yahoo Finance uses .L suffix
     const etfs = {
@@ -55,11 +62,11 @@ export default {
       DFNG: "DFNG.L",
       SSLN: "SSLN.L",
       GDGB: "GDGB.L",
-      IEUX: "IEUX.L",
       NUCG: "NUCG.L",
       COPG: "COPG.L",
       CYBP: "CYBP.L",
       NAVY: "NAVY.L",
+      NVDA: "NVDA",
     };
 
     const tickers = Object.keys(etfs);
@@ -109,12 +116,14 @@ export default {
     }
 
     // Normal mode: fetch all in parallel
-    const [etfResults, swdaResult, vixResult, brentResult] = await Promise.all([
+    const [etfResults, swdaResult, vixResult, brentResult, fxResult] = await Promise.all([
       Promise.all(symbols.map(s => qFull(s))),
       qSWDA(),
       qFull("^VIX"),
       qFull("BZ=F"),
+      qFull("GBPUSD=X"),
     ]);
+    gbpusd = fxResult.value;
 
     const prices    = {};
     const prevClose = {};
@@ -136,6 +145,7 @@ export default {
         vix:           vixResult.value,
         vixPrevClose:  vixResult.prevClose,
         brent:         brentResult.value,
+        gbpusd:        gbpusd,
       },
       ts:  Date.now(),
       src: "Yahoo Finance",

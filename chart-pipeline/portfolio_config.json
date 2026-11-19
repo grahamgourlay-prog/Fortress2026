@@ -7,11 +7,11 @@
     { "symbol": "SSLN",  "yf_symbol": "SSLN.L",  "label": "Silver ETC" },
     { "symbol": "SGLN",  "yf_symbol": "SGLN.L",  "label": "Gold ETC" },
     { "symbol": "CYBP",  "yf_symbol": "CYBP.L",  "label": "Cybersecurity ETF" },
-    { "symbol": "IEUX",  "yf_symbol": "IEUX.L",  "label": "Europe ex-UK ETF" },
     { "symbol": "NAVY",  "yf_symbol": "NAVY.L",  "label": "Defence / Naval ETF" },
     { "symbol": "DFNG",  "yf_symbol": "DFNG.L",  "label": "Defence ETF" },
     { "symbol": "GDGB",  "yf_symbol": "GDGB.L",  "label": "Gold Miners ETF (GBP)" },
-    { "symbol": "NUCG",  "yf_symbol": "NUCG.L",  "label": "Nuclear ETF" }
+    { "symbol": "NUCG",  "yf_symbol": "NUCG.L",  "label": "Nuclear ETF" },
+    { "symbol": "NVDA",  "yf_symbol": "NVDA",    "label": "NVIDIA Corp (USD)" }
   ],
 
   "intervals": [
