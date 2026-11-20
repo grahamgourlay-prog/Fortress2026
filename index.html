@@ -121,12 +121,10 @@ body { font-family: system-ui, -apple-system, sans-serif; background: #f8f9fb; c
 </div>
 <div id="positions"></div>
 <div class="ladder" id="ladder"></div>
-<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 19 November 2026 · 19 Nov: IEUX SOLD 20 sh @ £46.2612 (10:41:01, ref 27726MC22LK, return £921.23 = £925.22 − £3.99, settles 23 Nov; realised −£3.65 vs book £924.88) and NVDA BOUGHT 8 sh @ $150.50 (limit $150.50, 16:53:24, ref 27726MC26TL, total £929.18 = £925.19 + £3.99, settles 20 Nov) · no orders live · ii 19 Nov: investments £28,411.13, cash £35.29, SIPP total £28,446.42 · NVDA price is USD converted to £ at the live GBP/USD rate</div>
+<div class="footer">Market value = live price × shares · Total = market + cash · Prices persist via localStorage · Build: 20 November 2026 · 20 Nov: DFNG SOLD 59 sh @ £39.4696 (limit £39.45, 11:45:43, ref 27726MC6ZG4, return £2,324.72 = £2,328.71 − £3.99, settles 24 Nov; realised −£618.51 vs book £2,943.23) and SGLN BOUGHT 44 sh @ £52.69448 (limit £52.70, 13:21:58, ref 27726MC6ZX4, £2,322.55 = £2,318.56 + £3.99, settles 24 Nov) → SGLN 377 sh, avg £63.4480, book £23,919.91 · 19 Nov: IEUX sold 20 sh @ £46.2612; NVDA bought 8 sh @ $150.50 (£929.18) · no orders live · ii 20 Nov: investments £27,470.31, cash £37.48, SIPP total £27,507.79 · SGLN 70.0% of SIPP book cost (~10.4% of the ~£192.1k combined pension at market value) · NVDA price is USD converted to £ at the live GBP/USD rate</div>
 <script>
 const POSITIONS=[
-  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+18 sh @ £57.99 and +17 sh @ £58.30, 23 Oct; +32 sh 28 Sep @ £60.70; +21 sh 7 Sep @ £63.01 — letting it run)",shares:333,avgCost:64.856937,bookValue:21597.36,sealed:false,
-   orders:[]},
-  {ticker:"DFNG",name:"VanEck Defense UCITS ETF",role:"Kinetic / rearmament hedge (halved 59 sh @ £50.03, 12 Aug)",shares:59,avgCost:49.885254,bookValue:2943.23,sealed:false,
+  {ticker:"SGLN",name:"iShares Physical Gold ETC",role:"Core stagflation anchor (+44 sh @ £52.69, 20 Nov, funded by the DFNG sale; +18 sh @ £57.99 and +17 sh @ £58.30, 23 Oct; +32 sh 28 Sep @ £60.70 — letting it run)",shares:377,avgCost:63.448037,bookValue:23919.91,sealed:false,
    orders:[]},
   {ticker:"SSLN",name:"iShares Physical Silver ETC",role:"Inflation hedge / COMEX squeeze",shares:84,avgCost:54.097381,bookValue:4544.18,sealed:false,
    orders:[]},
@@ -163,7 +161,7 @@ const fmt=n=>n<10?n.toFixed(3):n.toFixed(2);
 const sgn=n=>n>=0?"+":"";
 function dStyle(v){if(v>=0)return"color:#16803c;background:#f0fdf4;border:1px solid #bbf7d0";if(v>=-5)return"color:#78350f;background:#fffbeb;border:1px solid #fde68a";if(v>=-15)return"color:#c2410c;background:#fff7ed;border:1px solid #fed7aa";return"color:#b91c1c;background:#fef2f2;border:1px solid #fecaca"}
 
-const CASH_DEFAULT=35.29; // ii DISPLAYED cash, 19 Nov 2026 (authoritative) = GBP £2.13 + EUR ~£33.16. GBP ledger: £10.08 + £921.23 (IEUX sell, settles 23 Nov) − £929.18 (NVDA buy, settles 20 Nov) = £2.13. The EUR ~£33 is the standing accrued-interest / EUR-cash gap seen since 31 Jul.
+const CASH_DEFAULT=37.48; // ii DISPLAYED cash, 20 Nov 2026 (authoritative) = GBP £4.30 + EUR ~£33.18. GBP ledger: £2.13 + £2,324.72 (DFNG sell) − £2,322.55 (SGLN buy, both settle 24 Nov) = £4.30. The EUR ~£33 is the standing accrued-interest / EUR-cash gap seen since 31 Jul.
 let prices={}, prevCloses={}, fetched=new Set(), macro={}, dryPowder=CASH_DEFAULT;
 let manualATH=parseFloat(localStorage.getItem(ATH_KEY)||"")||FALLBACK_ATH;
 // Default order: market value descending (live price × shares if available, else book value)

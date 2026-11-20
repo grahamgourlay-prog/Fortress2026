@@ -59,7 +59,6 @@ export default {
     // LSE ETFs — Yahoo Finance uses .L suffix
     const etfs = {
       SGLN: "SGLN.L",
-      DFNG: "DFNG.L",
       SSLN: "SSLN.L",
       GDGB: "GDGB.L",
       NUCG: "NUCG.L",
